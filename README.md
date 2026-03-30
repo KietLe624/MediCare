@@ -1,0 +1,1 @@
+"# MediCare - Hospital Management System" 
