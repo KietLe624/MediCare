@@ -1,0 +1,6 @@
+@MediCare.API_HostAddress = http://localhost:5034
+
+GET {{MediCare.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
