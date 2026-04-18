@@ -8,7 +8,6 @@ namespace MediCare.API.DTOs
         public class RegisterRequest
         {
             [Required]
-            [RegularExpression("^[a-zA-Z0-9]+$", ErrorMessage = "Username must contain only letters or digits.")]
             public string Username { get; set; } = string.Empty;
 
             [Required]
@@ -28,20 +27,33 @@ namespace MediCare.API.DTOs
             public string UserName { get; set; } = string.Empty;
             public string Password { get; set; } = string.Empty;
         }
-        public class RefreshToken 
+
+        public class LoginResponse
+        {
+            public string AccessToken { get; set; } = string.Empty;
+            public string RefreshToken { get; set; } = string.Empty;
+            public DateTime ExpiresIn { get; set; }
+            public UserInfoResponse User { get; set; } = null!;
+        }
+        public class RefreshTokenRequest
         {
             public string Token { get; set; } = string.Empty;
         }
         public class RevokeTokenRequest
         {
+            [Required]
             public string Token { get; set; } = string.Empty;
         }
         public class ForgotPasswordRequest
         {
+            [Required, EmailAddress]
             public string Email { get; set; } = string.Empty;
         }
          public class ResetPasswordRequest
          {
+            [Required, EmailAddress]
+            public string Email { get; set; }
+            [Required]
             public string Token { get; set; } = string.Empty;
             public string NewPassword { get; set; } = string.Empty;
             public string ConfirmPassword { get; set; } = string.Empty;
@@ -63,7 +75,7 @@ namespace MediCare.API.DTOs
         {
             public string FullName { get; set; } = string.Empty;
             public string Email { get; set; } = string.Empty;
-            public string Token { get; set; } = string.Empty;
+            public string AccessToken { get; set; } = string.Empty;
             public DateTime Expiration { get; set; }
             public IList<string> Roles { get; set; } = new List<string>();
         }

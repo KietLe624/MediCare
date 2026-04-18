@@ -30,19 +30,39 @@ namespace MediCare.API.Middlewares
         }
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            // Tạo một response chuẩn với mã lỗi và thông điệp lỗi
+            int statusCode = (int)HttpStatusCode.InternalServerError; // lỗi 500
+            string message = "Đã xảy ra lỗi trên server";
+
+            if (exception is AppException appEx)
+            {
+                statusCode = appEx.StatusCode; // mã lỗi
+                message = appEx.Message; // thông báo lỗi chi tiết
+            }
+            // response trả về
             var response = new
             {
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                Message = "Đã xảy ra lỗi trên server. Vui lòng thử lại sau."
+                statusCode,
+                message
             };
-            // Chuyển đổi response thành JSON
-            var jsonResponse = JsonSerializer.Serialize(response);
-            // Thiết lập header và status code cho response
+
+            var json = JsonSerializer.Serialize(response);
+
+            // header trả về JSON và mã lỗi
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            // Gửi response về client
-            return context.Response.WriteAsync(jsonResponse);
+            context.Response.StatusCode = statusCode;
+
+            return context.Response.WriteAsync(json);
+        }
+
+        public class AppException : Exception
+        {
+            public int StatusCode { get; }
+
+            public AppException(string message, int statusCode = 400)
+                : base(message)
+            {
+                StatusCode = statusCode;
+            }
         }
     }
 }

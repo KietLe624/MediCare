@@ -5,12 +5,12 @@ namespace MediCare.API.Services
     public interface IAuthService
     {  
         Task<AuthResponse> RegisterAsync(RegisterRequest request);
-        //Task<AuthResponse> LoginAsync(LoginRequest request);
-        //Task<RefreshToken> RefreshTokenAsync(RefreshToken request);
-        //Task RevokeTokenAsync(RevokeTokenRequest request);
-        //Task ForgotPasswordAsync(ForgotPasswordRequest request);
-        //Task ResetPasswordAsync(ResetPasswordRequest request);
-        //Task ChangePasswordAsync(long userId, ChangePasswordRequest request);
+        Task<LoginResponse> LoginAsync(LoginRequest request );
+        Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest refreshToken);  
+        Task RevokeTokenAsync(RevokeTokenRequest revokeToken);
+        Task ForgotPasswordAsync(ForgotPasswordRequest forgotPassword);
+        Task ResetPasswordAsync(ResetPasswordRequest resetPassword);
+        Task ChangePasswordAsync(long userId, ChangePasswordRequest request);
         Task<UserInfoResponse> GetCurrentUserAsync(long userId);
     }
 

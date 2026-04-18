@@ -12,7 +12,7 @@ namespace MediCare.API.Entities
         public string? FullName { get; set; }
 
         [MaxLength(20)]
-        public override string? PhoneNumber { get; set; }   // optional: override if needed
+        public override string? PhoneNumber { get; set; } 
 
         public bool IsActive { get; set; } = true;
 
