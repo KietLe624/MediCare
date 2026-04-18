@@ -1,14 +1,21 @@
+using MediCare.API.Common;
 using MediCare.API.Data;
 using MediCare.API.Entities;
+using MediCare.API.Services;
+using MediCare.API.Services.EmailService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ======================
+// Add Services
+// ======================
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -19,25 +26,49 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<long>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+// JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"]
+        };
+    });
 
+// Email Service
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
 
-// CORS config allow Angular call API
+// Auth Service
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// AutoMapper 
+builder.Services.AddAutoMapper(typeof(MediCare.API.Common.MappingProfile));
+
+// CORS cho Angular
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Angular development server URL
+        policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ======================
+// Configure Middleware
+// ======================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -45,9 +76,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseCors("AllowAngular");
 
+app.UseMiddleware<MediCare.API.Middlewares.ExceptionMiddleware>();   // Exception Middleware
+
+app.UseAuthentication();   
 app.UseAuthorization();
 
 app.MapControllers();

@@ -5,11 +5,14 @@ namespace MediCare.API.Entities
 {
     public class ApplicationUser : IdentityUser<long>
     {
+        [Required]
+        public override string UserName { get; set; } = null!; // use Identity's UserName
+
         [MaxLength(100)]
         public string? FullName { get; set; }
 
         [MaxLength(20)]
-        public string? PhoneNumber { get; set; }   // ghi đè nếu cần
+        public override string? PhoneNumber { get; set; } 
 
         public bool IsActive { get; set; } = true;
 
@@ -17,7 +20,7 @@ namespace MediCare.API.Entities
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation Properties
-        public virtual Patient? Patient { get; set; }     // bệnh nhân
-        public virtual Doctor? Doctor { get; set; }       // bác sĩ
+        public virtual Patient? Patient { get; set; }
+        public virtual Doctor? Doctor { get; set; }
     }
 }
