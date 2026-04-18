@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
 using MediCare.API.Entities;
-using MediCare.API.Services;
+using MediCare.API.Services.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static MediCare.API.DTOs.AuthDTO;

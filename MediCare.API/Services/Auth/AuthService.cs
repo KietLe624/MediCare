@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using static MediCare.API.DTOs.AuthDTO;
 
-namespace MediCare.API.Services
+namespace MediCare.API.Services.Auth
 {
     public class AuthService : IAuthService
     {
