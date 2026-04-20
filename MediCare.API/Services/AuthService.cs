@@ -2,7 +2,7 @@
 using MediCare.API.Data;
 using MediCare.API.DTOs;
 using MediCare.API.Entities;
-using MediCare.API.Services.EmailService;
+using MediCare.API.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using static MediCare.API.DTOs.AuthDTO;
 
-namespace MediCare.API.Services.Auth
+namespace MediCare.API.Services
 {
     public class AuthService : IAuthService
     {
@@ -120,7 +120,7 @@ namespace MediCare.API.Services.Auth
                 User = new UserInfoResponse
                 {
                     Id = user.Id,
-                    FullName = user.FullName,
+                    UserName = user.UserName,
                     Email = user.Email ?? "",
                     Roles = roles
                 }
@@ -171,6 +171,7 @@ namespace MediCare.API.Services.Auth
                 {
                     Id = user.Id,
                     FullName = user.FullName,
+                    UserName = user.UserName,
                     Email = user.Email ?? "",
                     Roles = roles
                 }

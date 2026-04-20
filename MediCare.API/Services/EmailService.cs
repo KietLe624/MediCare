@@ -1,12 +1,13 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MediCare.API.Common;
+using MediCare.API.Interfaces;
 using MediCare.API.Middlewares;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using static MediCare.API.Middlewares.ExceptionMiddleware;
 
-namespace MediCare.API.Services.EmailService
+namespace MediCare.API.Services
 {
     public class EmailService : IEmailService
     {

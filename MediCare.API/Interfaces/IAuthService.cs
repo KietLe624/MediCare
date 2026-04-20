@@ -1,6 +1,6 @@
 ﻿using static MediCare.API.DTOs.AuthDTO;
 
-namespace MediCare.API.Services.Auth
+namespace MediCare.API.Interfaces
 {
     public interface IAuthService
     {  
