@@ -28,20 +28,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<long>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-// JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"]
-        };
-    });
 
 // CORS config allow Angular call API
 builder.Services.AddCors(options =>
@@ -54,8 +40,11 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+// Dependency Injection
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
 
 //builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(MediCare.API.Common.MappingProfile));
@@ -75,6 +64,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+// JWT Authentication v2
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
