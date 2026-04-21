@@ -1,4 +1,4 @@
-﻿namespace MediCare.API.Services.EmailService
+﻿namespace MediCare.API.Interfaces
 {
     public interface IEmailService
     {

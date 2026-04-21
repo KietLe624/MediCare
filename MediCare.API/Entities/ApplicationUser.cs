@@ -14,6 +14,8 @@ namespace MediCare.API.Entities
         [MaxLength(20)]
         public override string? PhoneNumber { get; set; } 
 
+        [Required]
+        public override string Email { get; set; } = null!; // use Identity's Email
         public bool IsActive { get; set; } = true;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
