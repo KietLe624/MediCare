@@ -30,9 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Controllers\" />
-		<Folder Include="DTOs\" />
-		<Folder Include="Services\" />
 		<Folder Include="Common\" />
 		<Folder Include="Middlewares\" />
 	</ItemGroup>

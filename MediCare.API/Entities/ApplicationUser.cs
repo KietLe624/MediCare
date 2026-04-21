@@ -6,7 +6,7 @@ namespace MediCare.API.Entities
     public class ApplicationUser : IdentityUser<long>
     {
         [Required]
-        public override string UserName { get; set; } = null!; // use Identity's UserName
+        public override string? UserName { get; set; } = null!; // use Identity's UserName
 
         [MaxLength(100)]
         public string? FullName { get; set; }
@@ -15,7 +15,7 @@ namespace MediCare.API.Entities
         public override string? PhoneNumber { get; set; } 
 
         [Required]
-        public override string Email { get; set; } = null!; // use Identity's Email
+        public override string? Email { get; set; } = null!; // use Identity's Email
         public bool IsActive { get; set; } = true;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

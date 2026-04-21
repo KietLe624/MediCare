@@ -293,7 +293,7 @@ namespace MediCare.API.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName ?? ""),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-                new Claim("FullName", user.FullName)
+                new Claim("FullName", user.FullName),
             };
 
             foreach (var role in roles)

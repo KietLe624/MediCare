@@ -52,7 +52,7 @@ namespace MediCare.API.DTOs
          public class ResetPasswordRequest
          {
             [Required, EmailAddress]
-            public string Email { get; set; }
+            public string? Email { get; set; }
             [Required]
             public string Token { get; set; } = string.Empty;
             public string NewPassword { get; set; } = string.Empty;
