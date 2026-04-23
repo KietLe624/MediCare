@@ -15,7 +15,7 @@ namespace MediCare.API.DTOs
             public string SortBy { get; set; } = "CreatedAt";
             public string SortOrder { get; set; } = "desc";
         }
-        
+    
         // REQUEST
         public class CreatePatientRequest
         {

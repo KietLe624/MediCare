@@ -52,9 +52,7 @@ namespace MediCare.API.Controllers
             return Ok(result);
         }
 
-
-
-        // HEPLER 
+        // HELPER
         private long GetCurrentUserId()
         {
             var sub = User.FindFirstValue(JwtRegisteredClaimNames.Sub)

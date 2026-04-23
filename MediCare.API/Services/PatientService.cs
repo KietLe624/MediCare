@@ -71,7 +71,6 @@ namespace MediCare.API.Services
             };
         }
 
-
         public Task<PatientResponse> CreateAsync(CreatePatientRequest request, long createdByUserId)
         {
             if (request.UserId.HasValue)

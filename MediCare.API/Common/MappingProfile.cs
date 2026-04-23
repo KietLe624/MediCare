@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediCare.API.Entities;
 using static MediCare.API.DTOs.AuthDTO;
-using static MediCare.API.DTOs.UserDTO;
+using static MediCare.API.DTOs.DoctorDTO;
+using static MediCare.API.DTOs.DoctorScheduleDTO;
 using static MediCare.API.DTOs.PatientDTO;
+using static MediCare.API.DTOs.UserDTO;
 
 namespace MediCare.API.Common
 {
@@ -32,6 +34,27 @@ namespace MediCare.API.Common
             CreateMap<Patient, PatientSummaryResponse>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => CalculateAge(src.DateOfBirth)));
+
+            // DOCTOR
+            CreateMap<CreateDoctorRequest, Doctor>();
+
+            CreateMap<Doctor, DoctorSummaryResponse>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)) // lấy tên đầy đủ từ User
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialization ?? "General"));
+
+            CreateMap<Doctor, DoctorResponse>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)) // lấy tên đầy đủ từ User
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialization ?? "General"));
+
+            CreateMap<UpdateDoctorRequest, Doctor>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // map những trường không null
+            CreateMap<DoctorSchedule, DoctorScheduleResponse>();
+
+
 
         }
         // HELPER TÍNH TUỔI
