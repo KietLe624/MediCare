@@ -265,7 +265,6 @@ namespace MediCare.API.Services
             return doctor;
 
         }
-
         private async Task<DoctorSchedule> FindScheduleOrThrowAsync(long doctorId, long scheduleId)
         {
             var schedule = await _context.DoctorSchedules
