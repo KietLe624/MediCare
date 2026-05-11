@@ -11,5 +11,10 @@ namespace MediCare.API.Interfaces
         Task<DoctorResponse> UpdateDoctorAsync(long Id, UpdateDoctorRequest request);
         Task<bool> DeleteDoctorAsync(long Id);
         Task<List<DoctorScheduleResponse>> GetDoctorSchedulesAsync(long Id);
+        Task<DoctorScheduleResponse> CreateDoctorScheduleAsync(long Id, CreateScheduleRequest request);
+        Task<DoctorScheduleResponse> UpdateDoctorScheduleAsync(long doctorId, long scheduleId, UpdateScheduleRequest request);
+        Task DeleteDoctorScheduleAsync(long doctorId, long scheduleId);
+        Task<PagedResponse<DoctorAppointmentResponse>> GetAppointmentsAsync(long doctorId, DoctorAppointmentQueryParams query);
+        Task<bool> IsDoctorOwnerAsync(long doctorId, long currentUserId);
     }
 }

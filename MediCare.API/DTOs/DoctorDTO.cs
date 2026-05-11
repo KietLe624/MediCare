@@ -17,6 +17,13 @@ namespace MediCare.API.DTOs
             public string SortBy { get; set; } = "CreatedAt";
             public string SortOrder { get; set; } = "desc";
         }
+        public class DoctorAppointmentQueryParams
+        {
+            public DateOnly? Date { get; set; }   // lọc theo ngày
+            public string? Status { get; set; }   // Scheduled | Confirmed | Completed...
+            public int Page { get; set; } = 1;
+            public int PageSize { get; set; } = 20;
+        }
 
         // RESPONSE
         public class DoctorSummaryResponse
@@ -40,18 +47,19 @@ namespace MediCare.API.DTOs
             public decimal ConsultationFee { get; set; }
             public bool IsAvailable { get; set; }
             public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
-            public List<ScheduleResponse> Schedules { get; set; } = new List<ScheduleResponse>();
+            public List<DoctorScheduleResponse> Schedules { get; set; } = new List<DoctorScheduleResponse>();
         }
 
         public class DoctorScheduleResponse
         {
             [Required]
             public int Id { get; set; }
-            public string DayOfWeek { get; set; }
-            public TimeSpan StartTime { get; set; }
-            public TimeSpan EndTime { get; set; }
+            public string DayOfWeek { get; set; } // "Monday", "Tuesday", ...
+            public TimeOnly StartTime { get; set; }
+            public TimeOnly EndTime { get; set; }
+            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
             [Required]
-            public bool IsAvailable { get; set; }
+            public bool IsActive { get; set; }
         }
 
         // REQUEST
@@ -74,7 +82,6 @@ namespace MediCare.API.DTOs
             [Required]
             public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         }
-
         public class UpdateDoctorRequest
         {
             public long? DepartmentId { get; set; }
@@ -95,6 +102,86 @@ namespace MediCare.API.DTOs
             public int Page { get; set; }
             public int PageSize { get; set; }
             public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+        }
+        public class CreateScheduleRequest
+        {
+            [Range(1, 7, ErrorMessage = "DayOfWeek: 1=Thứ 2 ... 7=Chủ nhật")]
+            public int DayOfWeek { get; set; }
+
+            [Required]
+            public TimeOnly StartTime { get; set; }
+
+            [Required]
+            public TimeOnly EndTime { get; set; }
+
+            //[Range(15, 120)]
+            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
+
+            public bool IsActive { get; set; } = true;
+        }
+        public class UpdateScheduleRequest
+        {
+            [Required]
+            [Range(1, 7)]
+            public int DayOfWeek { get; set; }
+
+            [Required]
+            public TimeOnly StartTime { get; set; }
+
+            [Required]
+            public TimeOnly EndTime { get; set; }
+
+            //[Range(15, 120)]
+            //public int SlotDurationMinutes { get; set; } = 30;
+
+            public bool IsActive { get; set; } = true;
+        }
+        public class ScheduleStatusRequest
+        {
+            public bool IsAvailable { get; set; } // "true" hoặc "false"
+        }
+
+
+
+        public class AvailableSlotsResponse
+        {
+            public long DoctorId { get; set; }
+            public string DoctorName { get; set; } = default!;
+            public DateOnly Date { get; set; }
+            public List<TimeSlotResponse> Slots { get; set; } = new();
+        }
+
+        public class TimeSlotResponse
+        {
+            public TimeOnly StartTime { get; set; }
+            public TimeOnly EndTime { get; set; }
+            public bool IsAvailable { get; set; } // false nếu đã có appointment
+        }
+
+        public class DoctorAppointmentResponse
+        {
+            public long Id { get; set; }
+            public DateOnly AppointmentDate { get; set; }
+            public TimeOnly StartTime { get; set; }
+            public TimeOnly EndTime { get; set; }
+            public string Status { get; set; } = default!;
+            public string? Reason { get; set; }
+            public string? Notes { get; set; }
+            public DateTime CreatedAt { get; set; }
+
+            public PatientBriefResponse Patient { get; set; } = default!;
+        }
+        public class PatientBriefResponse
+        {
+            public long Id { get; set; }
+            public string UHID { get; set; } = default!;
+            public string FullName { get; set; } = default!;
+            public string? PhoneNumber { get; set; }
+        }
+        public class DepartmentBriefResponse
+        {
+            public long Id { get; set; }
+            public string Name { get; set; } = default!;
         }
     }
 }

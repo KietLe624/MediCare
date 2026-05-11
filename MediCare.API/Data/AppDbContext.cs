@@ -66,7 +66,7 @@ namespace MediCare.API.Data
             {
                 entity.HasOne(ds => ds.Doctor) // 1-1 với Doctor
                       .WithMany(d => d.Schedules) // 1 Doctor có nhiều Schedule
-                      .HasForeignKey(ds => ds.Id) 
+                      .HasForeignKey(ds => ds.DoctorId) 
                       .OnDelete(DeleteBehavior.Cascade); // doctor bị xóa, xóa luôn schedule
 
                 entity.Property(ds => ds.DayOfWeek)

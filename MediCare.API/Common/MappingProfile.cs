@@ -2,7 +2,7 @@
 using MediCare.API.Entities;
 using static MediCare.API.DTOs.AuthDTO;
 using static MediCare.API.DTOs.DoctorDTO;
-using static MediCare.API.DTOs.DoctorScheduleDTO;
+//using static MediCare.API.DTOs.DoctorScheduleDTO;
 using static MediCare.API.DTOs.PatientDTO;
 using static MediCare.API.DTOs.UserDTO;
 
@@ -53,6 +53,10 @@ namespace MediCare.API.Common
             CreateMap<UpdateDoctorRequest, Doctor>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // map những trường không null
             CreateMap<DoctorSchedule, DoctorScheduleResponse>();
+
+            CreateMap<CreateScheduleRequest, DoctorSchedule>();
+            CreateMap<UpdateScheduleRequest, DoctorSchedule>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // map những trường không null
 
 
 

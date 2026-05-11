@@ -1,12 +1,14 @@
 ﻿using MediCare.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace MediCare.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin,Doctor,Receptionist, Nurse")]
+    [Authorize(Roles = "Admin, Doctor, Receptionist, Nurse")]
     public class DoctorController : Controller
     {
         public readonly IDoctorService _doctorService;
@@ -43,12 +45,57 @@ namespace MediCare.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}/schedules")]
+        [HttpGet("{id}/schedules")] // id là doctorId
         public async Task<IActionResult> GetSchedules(long id)
         {
             var result = await _doctorService.GetDoctorSchedulesAsync(id);
             return Ok(result);
 
+        }
+
+        [HttpPost("{id}/schedules")]
+        public async Task<IActionResult> CreateSchedule(long id, DTOs.DoctorDTO.CreateScheduleRequest request)
+        {
+            var result = await _doctorService.CreateDoctorScheduleAsync(id, request);
+            return Ok(result);
+        }
+
+        [HttpPatch("{doctorId}/schedules/{scheduleId}")]
+        public async Task<IActionResult> UpdateSchedule(long doctorId, long scheduleId, DTOs.DoctorDTO.UpdateScheduleRequest request)
+        {
+            var result = await _doctorService.UpdateDoctorScheduleAsync(doctorId, scheduleId, request);
+            return Ok(result);
+        }
+        [HttpDelete("{doctorId}/schedules/{scheduleId}")]
+        public async Task<IActionResult> DeleteSchedule(long doctorId, long scheduleId)
+        {
+            await _doctorService.DeleteDoctorScheduleAsync(doctorId, scheduleId);
+            return NoContent();
+        }
+        [HttpGet("{doctorId}/appointments")]
+        public async Task<IActionResult> GetAppointments(long doctorId, [FromQuery] DTOs.DoctorDTO.DoctorAppointmentQueryParams query)
+        {
+            if (User.IsInRole("Doctor"))
+            {
+                var currentUserId = GetCurrentUserId();
+                var isOwner = await _doctorService.IsDoctorOwnerAsync(doctorId, currentUserId);
+                if (!isOwner) return Forbid();
+            }
+
+            var result = await _doctorService.GetAppointmentsAsync(doctorId, query);
+            return Ok(result);
+        }
+
+        // HELPER
+        private long GetCurrentUserId()
+        {
+            var sub = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!long.TryParse(sub, out var userId))
+                throw new UnauthorizedAccessException("Không xác định được người dùng");
+
+            return userId;
         }
     }
 }
