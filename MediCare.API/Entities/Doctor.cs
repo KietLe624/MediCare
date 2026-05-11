@@ -6,7 +6,6 @@ namespace MediCare.API.Entities
     {
         public long UserId { get; set; }
         public long DepartmentId { get; set; }
-
         public string? Specialization { get; set; }
         public string? LicenseNumber { get; set; }
         public int? ExperienceYears { get; set; }

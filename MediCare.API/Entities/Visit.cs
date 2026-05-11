@@ -12,8 +12,6 @@ namespace MediCare.API.Entities
         public string? Notes { get; set; }
         public string Status { get; set; } = "Completed"; // InProgress, Completed, Cancelled
 
-        public long? UpdatedBy { get; set; }
-
         // Navigation
         public virtual Appointment Appointment { get; set; } = null!;
         public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
