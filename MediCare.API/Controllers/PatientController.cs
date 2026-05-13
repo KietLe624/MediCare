@@ -36,7 +36,7 @@ namespace MediCare.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Nurse,Receptionist")]
-        public async Task<IActionResult> Create(DTOs.PatientDTO.CreatePatientRequest request)
+        public async Task<IActionResult> CreatePatient(DTOs.PatientDTO.CreatePatientRequest request)
         {
             var createdByUserId = GetCurrentUserId();
             var result = await _patientService.CreateAsync(request, createdByUserId);

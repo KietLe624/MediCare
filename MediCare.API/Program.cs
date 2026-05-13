@@ -46,6 +46,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 //builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(MediCare.API.Common.MappingProfile));
@@ -64,7 +65,7 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
-
+var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
 // JWT Authentication v2
 builder.Services.AddAuthentication(options =>
 {
@@ -86,6 +87,41 @@ builder.Services.AddAuthentication(options =>
         RoleClaimType = ClaimTypes.Role
     };
 });
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new()
+    {
+        Title = "MediCare API",
+        Version = "v1"
+    });
+
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Add JWT token"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 
 // Email Service
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
