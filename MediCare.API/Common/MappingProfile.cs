@@ -57,10 +57,10 @@ namespace MediCare.API.Common
             CreateMap<CreateScheduleRequest, DoctorSchedule>();
             CreateMap<UpdateScheduleRequest, DoctorSchedule>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // map những trường không null
-
-
-
+            
         }
+
+
         // HELPER TÍNH TUỔI
         private static int CalculateAge(DateOnly dateOfBirth)
         {
