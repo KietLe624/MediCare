@@ -1,6 +1,5 @@
 ﻿using MediCare.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -47,7 +46,7 @@ namespace MediCare.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Receptionist,Patient")]
-        public async Task<IActionResult> Create([FromBody] CreateAppointmentRequest request)
+        public async Task<IActionResult> CreatedAtAction([FromBody] CreateAppointmentRequest request )
         {
             var createdByUserId = GetCurrentUserId();
             var result = await _appointmentService.CreateAsync(request, createdByUserId);
