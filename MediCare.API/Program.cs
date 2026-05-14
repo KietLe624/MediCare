@@ -50,7 +50,7 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-
+builder.Services.AddScoped<IBillingService, BillingService>();
 
 
 //builder.Services.AddAutoMapper(typeof(Program).Assembly);
