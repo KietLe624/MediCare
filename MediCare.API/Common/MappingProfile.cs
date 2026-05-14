@@ -60,7 +60,6 @@ namespace MediCare.API.Common
             
         }
 
-
         // HELPER TÍNH TUỔI
         private static int CalculateAge(DateOnly dateOfBirth)
         {
