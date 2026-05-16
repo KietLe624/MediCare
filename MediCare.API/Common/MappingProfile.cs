@@ -2,7 +2,7 @@
 using MediCare.API.Entities;
 using static MediCare.API.DTOs.AuthDTO;
 using static MediCare.API.DTOs.UserDTO;
-using static MediCare.API.DTOs.PatientDTO;
+using MediCare.API.DTOs;
 
 namespace MediCare.API.Common
 {

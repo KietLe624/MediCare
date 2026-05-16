@@ -20,7 +20,7 @@ namespace MediCare.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem danh sách bệnh nhân
-        public async Task<IActionResult> GetAll([FromQuery] DTOs.PatientDTO.PatientQueryParams query)
+        public async Task<IActionResult> GetAll([FromQuery] DTOs.PatientQueryParams query)
         {
             var result = await _patientService.GetAllAsync(query);
             return Ok(result);
@@ -36,7 +36,7 @@ namespace MediCare.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Nurse,Receptionist")]
-        public async Task<IActionResult> Create(DTOs.PatientDTO.CreatePatientRequest request)
+        public async Task<IActionResult> Create(DTOs.CreatePatientRequest request)
         {
             var createdByUserId = GetCurrentUserId();
             var result = await _patientService.CreateAsync(request, createdByUserId);
@@ -45,14 +45,45 @@ namespace MediCare.API.Controllers
 
         [HttpPatch("{id}")]
         [Authorize(Roles = "Admin,Nurse,Receptionist")]
-        public async Task<IActionResult> Update(long id, DTOs.PatientDTO.UpdatePatientRequest request)
+        public async Task<IActionResult> Update(long id, DTOs.UpdatePatientRequest request)
         {
             var updatedByUserId = GetCurrentUserId();
             var result = await _patientService.UpdateAsync(id, request, updatedByUserId);
             return Ok(result);
         }
 
+        [HttpGet("appointments")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem lịch sử hẹn khám
+        public async Task<IActionResult> GetAppointments(long patientId, [FromQuery] DTOs.PatientHistoryQueryParams query)
+        {
+            var result = await _patientService.GetAppointmentsAsync(patientId, query);
+            return Ok(result);
+        }
 
+        [HttpGet("visits")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem lịch sử khám bệnh
+        public async Task<IActionResult> GetVisits(long patientId, [FromQuery] DTOs
+            .PatientHistoryQueryParams query)
+        {
+            var result = await _patientService.GetVisitsAsync(patientId, query);
+            return Ok(result);
+        }
+
+        [HttpGet("prescriptions")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem đơn thuốc
+        public async Task<IActionResult> GetPrescriptions(long patientId, [FromQuery] DTOs.PatientHistoryQueryParams query)
+        {
+            var result = await _patientService.GetPrescriptionsAsync(patientId, query);
+            return Ok(result);
+        }
+
+        [HttpGet("invoices")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem hóa đơn
+        public async Task<IActionResult> GetInvoices(long patientId, [FromQuery] DTOs.PatientHistoryQueryParams query)
+        {
+            var result = await _patientService.GetInvoicesAsync(patientId, query);
+            return Ok(result);
+        }
 
         // HEPLER 
         private long GetCurrentUserId()
