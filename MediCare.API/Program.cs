@@ -1,6 +1,7 @@
 using MediCare.API.Common;
 using MediCare.API.Data;
 using MediCare.API.Entities;
+using MediCare.API.Interceptor;
 using MediCare.API.Interfaces;
 using MediCare.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,9 +21,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<AuditLogInterceptor>();
+
+
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+    var interceptor = serviceProvider.GetRequiredService<AuditLogInterceptor>();
+    options.AddInterceptors(interceptor);
+});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<long>>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -52,6 +62,7 @@ builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IBillingService, BillingService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
 
 //builder.Services.AddAutoMapper(typeof(Program).Assembly);
