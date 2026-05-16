@@ -2,9 +2,8 @@
 using MediCare.API.Entities;
 using static MediCare.API.DTOs.AuthDTO;
 using static MediCare.API.DTOs.DoctorDTO;
-//using static MediCare.API.DTOs.DoctorScheduleDTO;
-using static MediCare.API.DTOs.PatientDTO;
 using static MediCare.API.DTOs.UserDTO;
+using MediCare.API.DTOs;
 
 namespace MediCare.API.Common
 {
