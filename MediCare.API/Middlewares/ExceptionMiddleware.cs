@@ -30,15 +30,37 @@ namespace MediCare.API.Middlewares
         }
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            int statusCode = (int)HttpStatusCode.InternalServerError; // lỗi 500
-            string message = "Đã xảy ra lỗi trên server";
+            int statusCode;
+            string message;
 
-            if (exception is AppException appEx)
+            switch (exception)
             {
-                statusCode = appEx.StatusCode; // mã lỗi
-                message = appEx.Message; // thông báo lỗi chi tiết
+                case AppException appEx:
+                    statusCode = appEx.StatusCode;
+                    message = appEx.Message;
+                    break;
+
+                case KeyNotFoundException:
+                    statusCode = (int)HttpStatusCode.NotFound;
+                    message = exception.Message;
+                    break;
+
+                case BadHttpRequestException:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    message = exception.Message;
+                    break;
+
+                case UnauthorizedAccessException:
+                    statusCode = (int)HttpStatusCode.Unauthorized;
+                    message = "Bạn không có quyền truy cập";
+                    break;
+
+                default:
+                    statusCode = (int)HttpStatusCode.InternalServerError;
+                    message = "Đã xảy ra lỗi trên server";
+                    break;
             }
-            // response trả về
+
             var response = new
             {
                 statusCode,
@@ -47,7 +69,6 @@ namespace MediCare.API.Middlewares
 
             var json = JsonSerializer.Serialize(response);
 
-            // header trả về JSON và mã lỗi
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
 

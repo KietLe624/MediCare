@@ -7,12 +7,11 @@ namespace MediCare.API.Entities
         public long AppointmentId { get; set; }
         public DateTime VisitDate { get; set; }
         public string? Symptoms { get; set; }
-        public string? Diagnosis { get; set; }
+        public string? Diagnosis { get; set; } 
         public string? Treatment { get; set; }
         public string? Notes { get; set; }
-        public string Status { get; set; } = "Completed"; // InProgress, Completed, Cancelled
 
-        public long? UpdatedBy { get; set; }
+        public string Status { get; set; } = "InProgress"; // InProgress, Completed, Cancelled
 
         // Navigation
         public virtual Appointment Appointment { get; set; } = null!;
