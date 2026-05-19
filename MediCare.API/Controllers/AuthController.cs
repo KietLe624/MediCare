@@ -81,5 +81,11 @@ namespace MediCare.API.Controllers
             await _authService.ChangePasswordAsync(userId, request);
             return Ok(new { message = "Mật khẩu đã được thay đổi thành công." });
         }
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser([FromHeader] long userId)
+        {
+            var userInfo = await _authService.GetCurrentUserAsync(userId);
+            return Ok(userInfo);
+        }
     }
 }
