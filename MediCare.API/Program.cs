@@ -12,7 +12,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 
+// Load .env file
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 // ======================
 // Add Services
@@ -28,7 +32,15 @@ builder.Services.AddScoped<AuditLogInterceptor>();
 
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+
+    if (!string.IsNullOrEmpty(dbServer) && connectionString != null)
+    {
+        connectionString = connectionString.Replace("{DB_SERVER}", dbServer);
+    }
+
+    options.UseSqlServer(connectionString);
 
     var interceptor = serviceProvider.GetRequiredService<AuditLogInterceptor>();
     options.AddInterceptors(interceptor);
@@ -90,7 +102,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options => {
+.AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
@@ -182,7 +195,7 @@ app.UseCors("AllowAngular");
 app.UseMiddleware<MediCare.API.Middlewares.ExceptionMiddleware>();   // Exception Middleware
 
 
-app.UseAuthentication();   
+app.UseAuthentication();
 
 app.UseAuthentication();
 

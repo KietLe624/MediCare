@@ -7,6 +7,7 @@
 .env
 
 # User-specific files
+
 *.rsuser
 *.suo
 *.user
@@ -509,6 +510,10 @@ $RECYCLE.BIN/
 .env.*.local
 *.secret
 Thumbs.db
+
+# Config files
+appsettings.json
+appsettings.*.json
 
 # ==================== IDE & Editors ====================
 .vscode/
