@@ -1,0 +1,129 @@
+<header class="w-full max-w-7xl mx-auto px-6 py-4 flex justify-between items-center shrink-0">
+  <div class="text-2xl font-extrabold tracking-tight text-brand-blue font-headline">
+    Medi<span class="text-slate-400">Care</span>
+  </div>
+</header>
+
+<main class="flex-1 flex items-center justify-center px-4 overflow-y-auto">
+  <div
+    class="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-2xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-slate-100 my-4">
+    <!-- left side -->
+    <div class="hidden md:flex flex-col justify-center p-12 bg-slate-50 relative overflow-hidden">
+      <div class="relative z-20">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="flex h-2 w-2 rounded-full bg-brand-blue animate-pulse"></span>
+          <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500">
+            Clinical Enterprise Resource Planning
+          </span>
+        </div>
+
+        <h1 class="font-headline text-3xl font-extrabold text-slate-900 leading-[1.1] mb-4">
+          Nền tảng <br />
+          <span class="text-brand-blue">Quản trị Y tế</span>
+          <span class="text-slate-400"> Toàn diện.</span>
+        </h1>
+
+        <p class="text-slate-600 mb-8 text-sm leading-relaxed max-w-sm">
+          Tối ưu hóa quy trình vận hành và quản lý hồ sơ bệnh án tập trung. Giải pháp giúp kết nối các phòng ban hiệu
+          quả.
+        </p>
+
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+            <span class="material-symbols-outlined text-brand-blue text-sm">check_circle</span>
+            Quản lý nhân sự & Phân ca trực
+          </li>
+          <li class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+            <span class="material-symbols-outlined text-brand-blue text-sm">check_circle</span>
+            Số hóa hồ sơ bệnh án (EMR)
+          </li>
+          <li class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+            <span class="material-symbols-outlined text-brand-blue text-sm">check_circle</span>
+            Báo cáo vận hành thời gian thực
+          </li>
+        </ul>
+      </div>
+
+      <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-brand-blue/5 rounded-full blur-[80px]"></div>
+      <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style="background-image: radial-gradient(#0057cd 0.5px, transparent 0.5px); background-size: 24px 24px;">
+      </div>
+    </div>
+    <!-- right side -->
+    <div class="p-8 md:p-12 flex flex-col justify-center glass-card">
+      <div class="mb-8 text-center md:text-left">
+        <h2 class="font-headline text-2xl font-bold text-slate-900">Đăng nhập</h2>
+        <p class="text-slate-500 text-sm mt-1">Vui lòng nhập thông tin để vào hệ thống.</p>
+      </div>
+
+      <form class="space-y-4" (ngSubmit)="onSubmit()">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5"
+            for="email">Email</label>
+          <div class="relative group">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-blue transition-colors text-lg">Mail</span>
+            <input type="email" id="email" name="userName" [(ngModel)]="credentials.userName" required
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-medical focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue outline-none transition-all text-sm"
+              placeholder="Email">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1.5">
+            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider" for="password">Mật khẩu</label>
+          </div>
+          <div class="relative group">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-blue transition-colors text-lg">lock</span>
+            <input type="password" id="password" name="password" [(ngModel)]="credentials.password" required
+              class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-medical focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue outline-none transition-all text-sm"
+              placeholder="••••••••••••">
+          </div>
+          <div class="mt-2 text-right">
+            <a routerLink="/forgot-password" class="text-[10px] font-semibold text-brand-blue hover:underline">Quên mật khẩu?</a>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <input type="checkbox" id="remember" name="remember" [(ngModel)]="rememberMe"
+            class="w-3.5 h-3.5 rounded border-slate-300 text-brand-blue focus:ring-brand-blue/20">
+          <label for="remember" class="ml-2 text-xs text-slate-500 select-none">Duy trì đăng nhập</label>
+        </div>
+
+        <p If="errorMessage" class="text-xs text-red-600 font-medium">{{ errorMessage }}</p>
+
+        <button type="submit" [disabled]="isSubmitting"
+          class="w-full bg-brand-blue hover:bg-blue-700 text-white font-bold py-3.5 rounded-medical shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm">
+          <span If="!isSubmitting">Đăng nhập</span>
+          <!-- <span If="isSubmitting">Đang xử lý...</span> -->
+        </button>
+        <div class="relative py-2">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-100"></div>
+          </div>
+          <div class="relative flex justify-center text-[9px] uppercase font-bold tracking-widest">
+            <span class="bg-white px-2 text-slate-400">Hoặc</span>
+          </div>
+        </div>
+
+        <button type="button"
+          class="w-full py-2.5 border border-slate-200 text-slate-600 text-[11px] font-semibold rounded-medical hover:bg-slate-50 transition-colors">
+          Đăng nhập bằng ...
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer
+  class="w-full max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-100 shrink-0">
+  <div class="font-headline font-bold text-slate-900 text-brand-blue text-sm">Medi<span
+      class="text-slate-400">Care</span></div>
+  <div class="flex gap-4 text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+    <a href="#" class="hover:text-brand-blue">Quyền riêng tư</a>
+    <a href="#" class="hover:text-brand-blue">Điều khoản</a>
+    <a href="#" class="hover:text-brand-blue">HIPAA</a>
+  </div>
+  <p class="text-[10px] text-slate-400">© 2026 MediCare. All rights reserved.</p>
+</footer>

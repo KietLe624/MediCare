@@ -1,0 +1,19 @@
+.admin-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--color-surface);
+}
+
+.admin-content {
+  padding-top: 6rem;
+}
+
+@media (min-width: 768px) {
+  .admin-header {
+    left: 16rem;
+    width: calc(100% - 16rem);
+  }
+}

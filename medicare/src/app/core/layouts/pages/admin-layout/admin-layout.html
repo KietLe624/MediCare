@@ -1,0 +1,21 @@
+<div class="bg-background font-body text-on-surface antialiased flex">
+
+  <!-- Sidebar -->
+  <app-sidebar />
+
+  <!-- Main -->
+  <main class="flex-1 md:ml-64 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <div class="admin-header">
+      <app-header />
+    </div>
+
+    <!-- Dynamic Page -->
+    <div class="admin-content p-8 w-full">
+      <router-outlet />
+    </div>
+
+  </main>
+
+</div>

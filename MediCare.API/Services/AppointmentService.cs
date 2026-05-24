@@ -62,9 +62,6 @@ namespace MediCare.API.Services
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize
-
-                
-
             };
 
         }

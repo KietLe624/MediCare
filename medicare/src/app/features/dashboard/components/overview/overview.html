@@ -1,0 +1,201 @@
+<div class="space-y-12">
+  <section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div>
+      <h2 class="font-headline text-3xl font-extrabold text-slate-900 leading-tight">Tổng quan hệ thống</h2>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button
+        class="disabled px-5 py-2.5 rounded-xl bg-surface-container-highest text-on-surface font-headline font-bold text-sm hover:bg-primary-fixed-dim transition-all active:scale-[0.98]">
+        Tải báo cáo
+      </button>
+      <button
+        class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-headline font-bold text-sm shadow-sm hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">add</span>
+        Thêm mới
+      </button>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div *ngFor="let stat of stats"
+      class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_12px_32px_rgba(0,87,205,0.06)] group hover:translate-y-[-4px] transition-all duration-300">
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center" [ngClass]="{
+            'text-primary bg-blue-50': stat.icon === 'patients' || stat.icon === 'visits',
+            'text-secondary bg-emerald-50': stat.icon === 'doctors',
+            'text-tertiary bg-orange-50': stat.icon === 'appointments'
+          }">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
+            {{ stat.icon === 'patients' ? 'groups'
+            : stat.icon === 'doctors' ? 'stethoscope'
+            : stat.icon === 'appointments' ? 'calendar_today'
+            : 'monitoring' }}
+          </span>
+        </div>
+        <ng-container [ngSwitch]="stat.icon">
+          <span *ngSwitchCase="'patients'" class="text-[10px] font-bold text-secondary uppercase tracking-widest">
+            {{ stat.note }}
+          </span>
+          <span *ngSwitchCase="'doctors'" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            {{ stat.note }}
+          </span>
+          <div *ngSwitchCase="'appointments'" class="flex -space-x-2">
+            <div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200"></div>
+            <div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div>
+            <div class="w-6 h-6 rounded-full border-2 border-white bg-slate-400"></div>
+          </div>
+          <span *ngSwitchCase="'visits'" class="text-[10px] font-bold text-primary uppercase tracking-widest">
+            {{ stat.note }}
+          </span>
+        </ng-container>
+      </div>
+      <p class="font-headline text-slate-500 text-sm font-medium">{{ stat.title }}</p>
+      <h3 class="font-headline text-3xl font-extrabold text-slate-900 mt-1">{{ stat.value }}</h3>
+      <ng-container [ngSwitch]="stat.icon">
+        <div *ngSwitchCase="'patients'" class="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-primary w-3/4 rounded-full"></div>
+        </div>
+        <div *ngSwitchCase="'doctors'" class="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-secondary w-1/2 rounded-full"></div>
+        </div>
+        <p *ngSwitchCase="'appointments'" class="text-[10px] font-bold text-tertiary mt-4 uppercase tracking-widest">
+          {{ stat.note }}
+        </p>
+        <div *ngSwitchCase="'visits'" class="mt-4 flex items-center gap-1">
+          <div class="h-4 w-2 bg-primary/20 rounded-t-sm"></div>
+          <div class="h-6 w-2 bg-primary/40 rounded-t-sm"></div>
+          <div class="h-3 w-2 bg-primary/30 rounded-t-sm"></div>
+          <div class="h-8 w-2 bg-primary/80 rounded-t-sm"></div>
+          <div class="h-10 w-2 bg-primary rounded-t-sm"></div>
+          <div class="h-5 w-2 bg-primary/50 rounded-t-sm"></div>
+        </div>
+      </ng-container>
+    </div>
+  </section>
+
+  <!-- Appointments today -->
+  <section class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(0,87,205,0.06)] overflow-hidden">
+    <div class="px-8 py-6 flex items-center justify-between bg-surface-container-high/30">
+      <div>
+        <h4 class="font-headline text-lg font-extrabold text-slate-900">Lịch hẹn hôm nay</h4>
+      </div>
+
+      <div class="flex gap-2">
+        <div class="relative" (clickOutside)="isFilterOpen = false">
+          <button (click)="isFilterOpen = !isFilterOpen"
+            class="p-2 rounded-lg border border-outline-variant/30 text-slate-500 hover:bg-slate-50 focus:ring-2 focus:ring-primary/20 transition-all">
+            <span class="material-symbols-outlined text-sm">filter_list</span>
+          </button>
+
+          <div *ngIf="isFilterOpen"
+            class="absolute right-0 mt-2 w-48 bg-surface border border-outline-variant/20 rounded-xl shadow-xl z-50 overflow-hidden origin-top-right">
+
+            <div
+              class="px-4 py-2 text-[10px] font-headline font-bold text-slate-500 uppercase tracking-widest bg-surface-container-low/50 border-b border-outline-variant/10">
+              Lọc theo trạng thái
+            </div>
+
+            <div class="py-1 flex flex-col">
+              <button
+                class="w-full text-left px-4 py-2 text-sm font-body text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors">
+                Tất cả lịch hẹn
+              </button>
+              <button
+                class="w-full text-left px-4 py-2 text-sm font-body text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500"></span> Đã xác nhận
+              </button>
+              <button
+                class="w-full text-left px-4 py-2 text-sm font-body text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-yellow-500"></span> Đang chờ
+              </button>
+              <button
+                class="w-full text-left px-4 py-2 text-sm font-body text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-red-500"></span> Đã hủy
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button class="p-2 rounded-lg border border-outline-variant/30 text-slate-500 hover:bg-slate-50">
+          <span class="material-symbols-outlined text-sm">more_vert</span>
+        </button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-surface-container-high/50">
+            <th class="px-8 py-4 font-headline text-[10px] uppercase tracking-widest text-slate-500 font-bold">Bệnh nhân
+            </th>
+            <th class="px-8 py-4 font-headline text-[10px] uppercase tracking-widest text-slate-500 font-bold">Bác sĩ
+            </th>
+            <th class="px-8 py-4 font-headline text-[10px] uppercase tracking-widest text-slate-500 font-bold">Thời gian
+            </th>
+            <th class="px-8 py-4 font-headline text-[10px] uppercase tracking-widest text-slate-500 font-bold">Trạng
+              thái
+            </th>
+            <th
+              class="px-8 py-4 font-headline text-[10px] uppercase tracking-widest text-slate-500 font-bold text-right">
+              Hành động</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr *ngFor="let item of appointments" class="hover:bg-slate-50/50 transition-colors group">
+            <td class="px-8 py-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary text-xs">
+                  {{ item.initials }}
+                </div>
+                <div>
+                  <p class="font-body text-sm font-semibold text-slate-900">{{ item.name }}</p>
+                  <p class="text-[10px] text-slate-500">{{ item.department }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-8 py-5">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full" [ngClass]="item.tone"></div>
+                <p class="font-body text-sm text-slate-700">{{ item.doctor }}</p>
+              </div>
+            </td>
+            <td class="px-8 py-5">
+              <p class="font-body text-sm text-slate-600">{{ item.time }}</p>
+              <p class="text-[10px] text-slate-400">Today</p>
+            </td>
+            <td class="px-8 py-5">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+                [ngClass]="item.tone">
+                {{ item.status }}
+              </span>
+            </td>
+            <td class="px-8 py-5 text-right">
+              <button class="text-primary hover:underline text-xs font-bold"
+                (click)="getAppointmentById(item.id)">View Details
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-8 py-5 bg-surface-container-low/50 flex items-center justify-between border-t border-slate-100">
+      <p class="font-body text-xs text-slate-500 font-medium">
+        Hiển thị {{ appointments.length }} trong {{ appointments.length }} lịch hẹn
+      </p>
+      <div class="flex items-center gap-4">
+        <button class="text-xs font-bold text-slate-400 cursor-not-allowed">Trước</button>
+        <div class="flex gap-2">
+          <button class="w-8 h-8 rounded-lg bg-primary text-white text-xs font-bold">1</button>
+          <button class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-bold">2</button>
+          <button class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-bold">3</button>
+        </div>
+        <button class="text-xs font-bold text-primary hover:underline">Sau</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drawer component -->
+  <app-drawer-appointment *ngIf="isDrawerOpen" [appointment]="selectedAppointment"
+    (closeDrawer)="closeDrawer()">
+  </app-drawer-appointment>
+</div>

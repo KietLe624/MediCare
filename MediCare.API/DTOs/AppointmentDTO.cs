@@ -119,6 +119,7 @@ namespace MediCare.API.DTOs
             public string UHID { get; set; } = default!;
             public string FullName { get; set; } = default!;
             public string? PhoneNumber { get; set; }
+
         }
 
         public class DoctorBriefResponse

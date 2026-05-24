@@ -273,7 +273,10 @@ namespace MediCare.API.Services
         // LẤY THÔNG TIN USER HIỆN TẠI
         public async Task<UserInfoResponse> GetCurrentUserAsync(long userId)
         {
+            if(userId == null) throw new BadHttpRequestException("UserId không hợp lệ");
+
             var user = await _userManager.FindByIdAsync(userId.ToString());
+
             if (user == null) throw new KeyNotFoundException("User không tồn tại");
 
             var roles = await _userManager.GetRolesAsync(user);

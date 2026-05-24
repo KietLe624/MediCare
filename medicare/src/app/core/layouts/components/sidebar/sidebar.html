@@ -1,0 +1,35 @@
+<aside
+  class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-slate-50 py-6 z-50 justify-between">
+
+  <div>
+    <div class="px-6 mb-10">
+      <h1 class="text-2xl font-bold text-primary">
+        MediCare
+      </h1>
+    </div>
+
+    <nav class="flex flex-col gap-1 px-2">
+      @for(item of menuItems; track item.route) {
+      <a [routerLink]="item.route" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100">
+        <span class="material-symbols-outlined">
+          {{ item.icon }}
+        </span>
+        <span>
+          {{ item.label }}
+        </span>
+      </a>
+      }
+    </nav>
+  </div>
+
+  <div class="px-2">
+    <button (click)="logout()"
+      class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-red-500">
+      <span class="material-symbols-outlined">
+        logout
+      </span>
+      <span>Đăng xuất</span>
+    </button>
+  </div>
+
+</aside>

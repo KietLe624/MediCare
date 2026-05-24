@@ -3,6 +3,8 @@ using MediCare.API.Entities;
 using MediCare.API.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using static MediCare.API.DTOs.AuthDTO;
 
 
@@ -82,10 +84,23 @@ namespace MediCare.API.Controllers
             return Ok(new { message = "Mật khẩu đã được thay đổi thành công." });
         }
         [HttpGet("me")]
-        public async Task<IActionResult> GetCurrentUser([FromHeader] long userId)
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var userInfo = await _authService.GetCurrentUserAsync(userId);
+            var currentUserId = GetCurrentUserId();
+
+            var userInfo = await _authService.GetCurrentUserAsync(currentUserId);
             return Ok(userInfo);
+        }
+
+        private long GetCurrentUserId()
+        {
+            var sub = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!long.TryParse(sub, out var userId))
+                throw new UnauthorizedAccessException("Không xác định được người dùng");
+
+            return userId;
         }
     }
 }
