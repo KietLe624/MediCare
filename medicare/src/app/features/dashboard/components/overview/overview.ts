@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
-import { ClickOutside } from '../../../../core/shared/directives/click-outside';
+import { ClickOutside } from '../../../../shared/directives/click-outside';
 import { Appointment } from '../../../appointment/services/appointment';
 import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
 import { AppointmentResponse } from '../../../appointment/models/appointment.model';

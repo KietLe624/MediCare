@@ -5,7 +5,7 @@ import { roleGuard } from './core/guards/roleGuard/role-guard';
 import { noAuthGuard } from './core/guards/noAuthGuard/no-auth-guard';
 import { authGuard } from './core/guards/authGuard/auth-guard';
 import { OverviewComponent } from './features/dashboard/components/overview/overview';
-import { AdminLayout } from './core/layouts/pages/admin-layout/admin-layout';
+import { AdminLayout } from './layouts/pages/admin-layout/admin-layout';
 
 export const routes: Routes = [
   {
