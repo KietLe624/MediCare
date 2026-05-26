@@ -11,6 +11,7 @@ export class Appointment {
   private appointmentUrl = 'http://localhost:5034/api/Appointment';
 
   constructor() { }
+  
   getApppointmentById(id: number) {
     try {
       return this.http.get(`${this.appointmentUrl}/${id}`);

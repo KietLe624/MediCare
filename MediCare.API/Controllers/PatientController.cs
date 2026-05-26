@@ -18,10 +18,20 @@ namespace MediCare.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchPatients([FromQuery] string keyword)
+        {
+            var result = await _patientService
+                .SearchPatientsAsync(keyword);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Admin,Doctor,Nurse,Receptionist")] // Admin, Doctor, Nurse đều có thể xem danh sách bệnh nhân
         public async Task<IActionResult> GetAll([FromQuery] DTOs.PatientQueryParams query)
-        {
+        {   
+
             var result = await _patientService.GetAllAsync(query);
             return Ok(result);
         }

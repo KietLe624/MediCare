@@ -24,17 +24,25 @@ namespace MediCare.API.DTOs
             public int Page { get; set; } = 1;
             public int PageSize { get; set; } = 20;
         }
-
         // RESPONSE
+        public class DoctorLookupResponse
+        {
+            public long Id { get; set; }
+
+            public string FullName { get; set; } = default!;
+
+            public string? Specialization { get; set; }
+
+            public bool IsAvailable { get; set; }
+        }
         public class DoctorSummaryResponse
         {
             public int Id { get; set; }
-            public string FullName { get; set; }
-            public string Specialty { get; set; }
-            public string Email { get; set; }
-            public string PhoneNumber { get; set; }
+            public string FullName { get; set; } = default!;
+            public string Specialty { get; set; } = default!;
+            public string Email { get; set; } = default!;
+            public string PhoneNumber { get; set; } = default!;
         }
-
         public class DoctorResponse
         {
             public int Id { get; set; }
@@ -49,7 +57,6 @@ namespace MediCare.API.DTOs
             public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
             public List<DoctorScheduleResponse> Schedules { get; set; } = new List<DoctorScheduleResponse>();
         }
-
         public class DoctorScheduleResponse
         {
             [Required]
@@ -61,7 +68,6 @@ namespace MediCare.API.DTOs
             [Required]
             public bool IsActive { get; set; }
         }
-
         // REQUEST
         public class CreateDoctorRequest
         {
@@ -140,9 +146,6 @@ namespace MediCare.API.DTOs
         {
             public bool IsAvailable { get; set; } // "true" hoặc "false"
         }
-
-
-
         public class AvailableSlotsResponse
         {
             public long DoctorId { get; set; }
@@ -150,14 +153,12 @@ namespace MediCare.API.DTOs
             public DateOnly Date { get; set; }
             public List<TimeSlotResponse> Slots { get; set; } = new();
         }
-
         public class TimeSlotResponse
         {
             public TimeOnly StartTime { get; set; }
             public TimeOnly EndTime { get; set; }
             public bool IsAvailable { get; set; } // false nếu đã có appointment
         }
-
         public class DoctorAppointmentResponse
         {
             public long Id { get; set; }

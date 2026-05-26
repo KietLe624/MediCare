@@ -19,13 +19,21 @@ namespace MediCare.API.Controllers
             _doctorService = doctorService;
             _logger = logger;
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string keyword)
+        {
+            var result = await _doctorService.SearchDoctorAsync(keyword);
+            return Ok(result);
+        }
         [HttpGet]
+        [Authorize(Roles = "Admin, Receptionist, Nurse")]
         public async Task<IActionResult> GetAll([FromQuery] DTOs.DoctorDTO.DoctorQueryParams query)
         {
             var result = await _doctorService.GetDoctorsAsync(query);
             return Ok(result);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Receptionist, Nurse, Doctor")]
         public async Task<IActionResult> GetById(long id)
         {
             var result = await _doctorService.GetDoctorByIdAsync(id);
@@ -33,12 +41,14 @@ namespace MediCare.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(DTOs.DoctorDTO.CreateDoctorRequest request)
         {
             var result = await _doctorService.CreateDoctorAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin, Doctor")]
         public async Task<IActionResult> Update(long id, DTOs.DoctorDTO.UpdateDoctorRequest request)
         {
             var result = await _doctorService.UpdateDoctorAsync(id, request);
@@ -46,6 +56,7 @@ namespace MediCare.API.Controllers
         }
 
         [HttpGet("{id}/schedules")] // id là doctorId
+        [Authorize(Roles = "Admin, Doctor")]
         public async Task<IActionResult> GetSchedules(long id)
         {
             var result = await _doctorService.GetDoctorSchedulesAsync(id);
@@ -54,6 +65,7 @@ namespace MediCare.API.Controllers
         }
 
         [HttpPost("{id}/schedules")]
+        [Authorize(Roles = "Admin, Doctor, Receptionist")]
         public async Task<IActionResult> CreateSchedule(long id, DTOs.DoctorDTO.CreateScheduleRequest request)
         {
             var result = await _doctorService.CreateDoctorScheduleAsync(id, request);
@@ -61,18 +73,21 @@ namespace MediCare.API.Controllers
         }
 
         [HttpPatch("{doctorId}/schedules/{scheduleId}")]
+        [Authorize(Roles = "Admin, Doctor, Receptionist")]
         public async Task<IActionResult> UpdateSchedule(long doctorId, long scheduleId, DTOs.DoctorDTO.UpdateScheduleRequest request)
         {
             var result = await _doctorService.UpdateDoctorScheduleAsync(doctorId, scheduleId, request);
             return Ok(result);
         }
         [HttpDelete("{doctorId}/schedules/{scheduleId}")]
+        [Authorize(Roles = "Admin, Doctor, Receptionist")]
         public async Task<IActionResult> DeleteSchedule(long doctorId, long scheduleId)
         {
             await _doctorService.DeleteDoctorScheduleAsync(doctorId, scheduleId);
             return NoContent();
         }
         [HttpGet("{doctorId}/appointments")]
+        [Authorize(Roles = "Admin, Doctor, Receptionist, Nurse")]
         public async Task<IActionResult> GetAppointments(long doctorId, [FromQuery] DTOs.DoctorDTO.DoctorAppointmentQueryParams query)
         {
             if (User.IsInRole("Doctor"))

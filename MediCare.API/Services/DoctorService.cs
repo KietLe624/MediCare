@@ -23,32 +23,70 @@ namespace MediCare.API.Services
             _context = context;
         }
 
+        public async Task<List<DoctorLookupResponse>> SearchDoctorAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return new();
+
+            keyword = keyword.Trim();
+
+            var doctors = await _context.Doctors
+                .AsNoTracking()
+                .Where(d =>
+                    EF.Functions.Like(
+                        d.User.FullName,
+                        $"{keyword}%")
+                    ||
+                    (d.Specialization != null &&
+                     EF.Functions.Like(
+                         d.Specialization,
+                         $"{keyword}%"))
+                )
+                .Select(d => new Doctor
+                {
+                    Id = d.Id,
+                    UserId = d.UserId,
+                    Specialization = d.Specialization,
+                    User = new ApplicationUser
+                    {
+                        FullName = d.User.FullName
+                    }
+                })
+                .Take(10)
+                .ToListAsync();
+
+            return _mapper.Map<List<DoctorLookupResponse>>(doctors);
+        }
+
         public async Task<PagedResponse<DoctorSummaryResponse>> GetDoctorsAsync(DoctorQueryParams query)
         {
-            // lấy danh sách bác sĩ từ database, áp dụng filter, search, pagination
-            var doctorQuery = _context.Doctors.AsNoTracking();
+            // 1. Luôn Include bảng User ngay từ đầu để có dữ liệu FullName
+            var doctorQuery = _context.Doctors
+                .Include(d => d.User)
+                .AsNoTracking();
 
-            // áp dụng filter, search, pagination ở đây
+            // 2. Áp dụng filter / search
             if (!string.IsNullOrEmpty(query.Search))
             {
-                var searchLower = query.Search.ToLower(); // convert sang chữ thường
+                var searchTerm = query.Search.Trim();
+
                 doctorQuery = doctorQuery
-                    .Include(d => d.User)
-                    .Where(d => d.User.FullName.ToLower().Contains(searchLower) ||
-                    (d.Specialization != null &&
-                     d.Specialization.ToLower().Contains(searchLower)));
+                    .Where(d => EF.Functions.Like(d.User.FullName, $"%{searchTerm}%") ||
+                               (d.Specialization != null && EF.Functions.Like(d.Specialization, $"%{searchTerm}%")));
             }
 
             var totalCount = await doctorQuery.CountAsync();
 
             var pageSize = Math.Min(query.PageSize, 100);
             var page = Math.Max(query.Page, 1);
+
             var doctors = await doctorQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            var items = _mapper.Map<List<DoctorSummaryResponse>>(doctors); // map sang DTO trả về
+            // 3. Map sang DTO
+            var items = _mapper.Map<List<DoctorSummaryResponse>>(doctors);
 
             return new PagedResponse<DoctorSummaryResponse>
             {
@@ -188,7 +226,6 @@ namespace MediCare.API.Services
                doctorId, scheduleId, request.DayOfWeek, request.StartTime, request.EndTime);
             return _mapper.Map<DoctorScheduleResponse>(schedule);
         }
-
         // xóa lịch bác sĩ
         public async Task DeleteDoctorScheduleAsync(long doctorId, long scheduleId)
         {

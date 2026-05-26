@@ -21,20 +21,47 @@ namespace MediCare.API.Services
             _mapper = mapper;
             _logger = logger;
         }
+
+        public async Task<List<PatientLookupResponse>>SearchPatientsAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return new();
+
+            keyword = keyword.Trim();
+
+            var patients = await _context.Patients
+                .AsNoTracking()
+                .Where(p =>
+                    EF.Functions.Like(
+                        p.FirstName + " " + p.LastName,
+                        $"%{keyword}%")
+                    ||
+                    EF.Functions.Like(p.UHID, $"%{keyword}%")
+                    ||
+                    (p.PhoneNumber != null &&
+                     EF.Functions.Like(p.PhoneNumber, $"%{keyword}%"))
+                )
+                .OrderBy(p => p.FirstName)
+                .Take(10)
+                .ToListAsync();
+
+            return _mapper.Map<List<PatientLookupResponse>>(patients);
+        }
         public async Task<PagedResponse<PatientSummaryResponse>> GetAllAsync(PatientQueryParams query)
         {
             // lấy tất cả bệnh nhân
             var patientsQuery = _context.Patients.AsNoTracking();
 
             // filter(tên, UHID, SĐT)
-            if (!string.IsNullOrEmpty(query.Search))
+            if (!string.IsNullOrWhiteSpace(query.Search))
             {
-                var searchLower = query.Search.ToLower(); // convert sang chữ thường
+                var search = query.Search.Trim();
+
                 patientsQuery = patientsQuery.Where(p =>
-                    p.FirstName.ToLower().Contains(searchLower) ||
-                    p.LastName.ToLower().Contains(searchLower) ||
-                    p.UHID.ToLower().Contains(searchLower) ||
-                    (p.PhoneNumber != null && p.PhoneNumber.Contains(searchLower))
+                    EF.Functions.Like(p.FirstName + " " + p.LastName, $"%{search}%") ||
+                    EF.Functions.Like(p.UHID, $"%{search}%") ||
+                    (p.PhoneNumber != null &&
+                     EF.Functions.Like(p.PhoneNumber, $"%{search}%"))
                 );
             }
 
@@ -85,7 +112,7 @@ namespace MediCare.API.Services
                 {
                     throw new InvalidOperationException($"User với ID {request.UserId.Value} đã liên kết với một hồ sơ khác");
                 }
-                
+
             }
             var patient = _mapper.Map<Patient>(request);
             patient.UHID = GenerateUHIDAsync().GetAwaiter().GetResult(); // sinh UHID
@@ -398,7 +425,7 @@ namespace MediCare.API.Services
 
         // MAPPING
         private static PatientAppointmentResponse MapToResponse(Appointment a)
-            => new PatientAppointmentResponse   
+            => new PatientAppointmentResponse
             {
                 Id = a.Id,
                 AppointmentDate = a.AppointmentDate.ToDateTime(TimeOnly.MinValue),
@@ -415,8 +442,8 @@ namespace MediCare.API.Services
                     Specialization = a.Doctor.Specialization ?? "",
                 },
             };
-        }
-     
-    
+    }
+
+
 }
 

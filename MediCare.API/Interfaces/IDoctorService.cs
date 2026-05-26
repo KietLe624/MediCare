@@ -4,7 +4,8 @@ using static MediCare.API.DTOs.DoctorDTO;
 namespace MediCare.API.Interfaces
 {
     public interface IDoctorService
-    {
+    {   
+        Task<List<DoctorLookupResponse>> SearchDoctorAsync(string keyword);
         Task<PagedResponse<DoctorSummaryResponse>> GetDoctorsAsync(DoctorQueryParams query);
         Task<DoctorResponse> GetDoctorByIdAsync(long Id);
         Task<DoctorResponse> CreateDoctorAsync(CreateDoctorRequest request);

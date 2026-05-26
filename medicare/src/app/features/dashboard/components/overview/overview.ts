@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
 import { ClickOutside } from '../../../../core/shared/directives/click-outside';
 import { Appointment } from '../../../appointment/services/appointment';
 import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
 import { AppointmentResponse } from '../../../appointment/models/appointment.model';
+import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, ClickOutside, DrawerAppointment],
+  imports: [CommonModule, ClickOutside, DrawerAppointment, AppointmentCreate],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
 })
@@ -109,6 +110,19 @@ export class OverviewComponent {
       },
     ];
   }
+
+  // OPEN APPOINTMENT FORM
+  isFormOpen = signal(false);
+
+  openForm() {
+    this.isFormOpen.set(true);
+  }
+
+  closeForm() {
+    this.isFormOpen.set(false);
+  }
+
+
 
   // HELPERS
   private formatNumber(value: number): string {

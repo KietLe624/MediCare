@@ -12,7 +12,6 @@ export class DashboardService {
   private router = inject(Router);
   private dashboardUrl = 'http://localhost:5034/api/Dashboard';
 
-
   constructor() { }
 
   getOverview(): Observable<OverviewResponse> {

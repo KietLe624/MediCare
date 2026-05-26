@@ -34,6 +34,14 @@ namespace MediCare.API.Common
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => CalculateAge(src.DateOfBirth)));
 
+            CreateMap<Patient, PatientLookupResponse>()
+                .ForMember(
+                    dest => dest.FullName,
+                    opt => opt.MapFrom(src =>
+                        src.FirstName + " " + src.LastName
+                    )
+                );
+
             // DOCTOR
             CreateMap<CreateDoctorRequest, Doctor>();
 
@@ -56,7 +64,9 @@ namespace MediCare.API.Common
             CreateMap<CreateScheduleRequest, DoctorSchedule>();
             CreateMap<UpdateScheduleRequest, DoctorSchedule>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // map những trường không null
-            
+
+            CreateMap<Doctor, DoctorLookupResponse>()
+                .ForMember(dest => dest.FullName,opt => opt.MapFrom(src => src.User.FullName));
         }
 
         // HELPER TÍNH TUỔI

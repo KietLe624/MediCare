@@ -1,0 +1,174 @@
+<div class="appointment-create">
+  <div class="appointment-create-overlay"></div>
+  <div class="appointment-create-content">
+
+    <div
+      class="relative bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
+
+      <div class="px-8 py-6 border-b border-surface-container-high flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1">event_available</span>
+          </div>
+          <div>
+            <h2 class="font-headline text-xl font-extrabold text-on-surface">Đặt lịch khám</h2>
+            <p class="text-[10px] uppercase tracking-widest text-outline font-bold">Biểu mẫu đăng ký lịch khám</p>
+          </div>
+        </div>
+        <button (click)="closeForm()"
+          class="p-2 hover:bg-surface-container-high rounded-full text-outline transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="px-8 py-8 space-y-8 flex-1 overflow-visible">
+
+        <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
+          <span class="material-symbols-outlined text-primary">info</span>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            <span class="font-bold">Clinical Note:</span> Ensure all mandatory fields are verified with the patient's
+            record to maintain data integrity.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 relative">
+
+          <div class="space-y-6">
+            <h3 class="font-headline text-xs font-bold text-primary uppercase tracking-widest">
+              Bệnh nhân &amp; Thông tin lâm sàng
+            </h3>
+            <div class="space-y-4">
+
+              <div>
+                <label class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">Tìm kiếm
+                  bệnh nhân</label>
+                <div class="relative group z-50">
+                  <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">person</span>
+                  <input [formControl]="searchPatient"
+                    class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                    placeholder="Nhập tên hoặc mã bệnh nhân..." type="text" />
+
+                  @if (patients.length > 0) {
+                  <ul
+                    class="absolute top-full left-0 mt-2 w-full bg-white border border-outline-variant/30 rounded-xl shadow-xl max-h-48 overflow-y-auto no-scrollbar py-1">
+                    @for (patient of patients; track patient.id) {
+                    <li (click)="selectPatient(patient)"
+                      class="px-4 py-3 cursor-pointer hover:bg-blue-50 transition-colors text-sm font-medium text-slate-700 flex items-center gap-3 border-b border-slate-50 last:border-none">
+                      <div
+                        class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
+                        {{ patient.fullName.charAt(0) | uppercase }}
+                      </div>
+                      <div>
+                        <p class="font-semibold text-slate-900">{{ patient.fullName }}</p>
+                        <p class="text-[10px] text-slate-500 font-normal">Mã BN: {{ patient.id }}</p>
+                      </div>
+                    </li>
+                    }
+                  </ul>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label
+                  class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">Khoa</label>
+                <div class="relative group">
+                  <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">domain</span>
+                  <select
+                    class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none appearance-none">
+                    <option>Chọn Khoa</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">
+                  Bác sĩ phụ trách
+                </label>
+                <div class="relative group">
+                  <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">stethoscope</span>
+
+                  <input [formControl]="searchDoctor"
+                    class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                    placeholder="Nhập tên bác sĩ..." type="text" />
+
+                  @if (doctors.length > 0) {
+                  <ul
+                    class="absolute bottom-full left-0 mb-2 w-full z-50 bg-white border border-outline-variant/30 rounded-xl shadow-[0_-10px_20px_rgba(0,0,0,0.08)] max-h-48 overflow-y-auto no-scrollbar py-1">
+                    @for (doctor of doctors; track doctor.id) {
+                    <li (click)="selectDoctor(doctor)"
+                      class="px-4 py-3 cursor-pointer hover:bg-emerald-50 transition-colors text-sm font-medium text-slate-700 flex items-center gap-3 border-b border-slate-50 last:border-none">
+
+                      <div
+                        class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs shrink-0">
+                        {{ doctor.fullName.charAt(0) | uppercase }}
+                      </div>
+
+                      <div>
+                        <p class="font-semibold text-slate-900">{{ doctor.fullName }}</p>
+                        <p class="text-[10px] text-slate-500 font-normal">{{ doctor.specialization }}</p>
+                      </div>
+
+                    </li>
+                    }
+                  </ul>
+                  }
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <h3 class="font-headline text-xs font-bold text-primary uppercase tracking-widest">Lịch trình &amp; Ưu tiên
+            </h3>
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">Ngày</label>
+                  <div class="relative group">
+                    <input
+                      class="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                      type="date" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">Thời
+                    gian</label>
+                  <select
+                    class="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none">
+                    <option>Chọn Thời gian</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-outline-variant uppercase tracking-widest mb-2">Lý do lâm
+                  sàng</label>
+                <textarea
+                  class="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                  placeholder="Primary complaint..." rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div
+        class="px-8 py-6 bg-surface-container-low border-t border-surface-container-high flex items-center justify-end gap-4 shrink-0 relative z-0">
+        <button (click)="closeForm()"
+          class="px-6 py-2.5 rounded-xl font-headline font-bold text-sm text-outline hover:text-on-surface-variant transition-all">Huỷ</button>
+        <button (click)="onSubmit()"
+          class="px-8 py-2.5 rounded-xl bg-primary text-white font-headline font-bold text-sm shadow-lg shadow-primary/20 hover:bg-on-primary-fixed-variant transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">check</span> Xác nhận
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

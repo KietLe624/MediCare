@@ -23,7 +23,6 @@ namespace MediCare.API.DTOs
         //public List<PatientVisitResponse> Visits { get; internal set; }
         public int TotalCount { get; internal set; }
     }
-
     // REQUEST
     public class CreatePatientRequest
     {
@@ -122,8 +121,14 @@ namespace MediCare.API.DTOs
         // UserId nullable — bệnh nhân có thể không có tài khoản
         public long? UserId { get; set; }
     }
-
     // RESPONSE
+    public class PatientLookupResponse
+    {
+        public long Id { get; set; }
+        public string UHID { get; set; } = default!;
+        public string FullName { get; set; } = default!;
+        public string? PhoneNumber { get; set; }    
+    }
     public class PatientResponse
     {
         public long Id { get; set; }
@@ -161,7 +166,6 @@ namespace MediCare.API.DTOs
         public string PatientType { get; set; } = default!;
         public DateTime CreatedAt { get; set; }
     }
-
     public class PatientAppointmentResponse
     {
         public long Id { get; set; }
@@ -239,7 +243,6 @@ namespace MediCare.API.DTOs
         public long Id { get; set; }
         public string Name { get; set; } = default!;
     }
-
     public class MedicationBriefResponse
     {
         public long Id { get; set; }
@@ -247,7 +250,6 @@ namespace MediCare.API.DTOs
         public string GenericName { get; set; }
         public string Unit { get; set; }
     }
-
     public class InvoiceItemBriefResponse
     {
         public long Id { get; set; }

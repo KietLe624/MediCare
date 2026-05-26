@@ -5,6 +5,7 @@ namespace MediCare.API.Interfaces
 {
     public interface IPatientService
     {
+        Task<List<PatientLookupResponse>> SearchPatientsAsync(string keyword);
         Task<PagedResponse<PatientSummaryResponse>> GetAllAsync(PatientQueryParams query);
         Task<PatientResponse> GetByIdAsync(long id);
         Task<PatientResponse> CreateAsync(CreatePatientRequest request, long createdByUserId);

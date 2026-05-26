@@ -8,7 +8,7 @@
         class="disabled px-5 py-2.5 rounded-xl bg-surface-container-highest text-on-surface font-headline font-bold text-sm hover:bg-primary-fixed-dim transition-all active:scale-[0.98]">
         Tải báo cáo
       </button>
-      <button
+      <button (click)="openForm()"
         class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-headline font-bold text-sm shadow-sm hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-2">
         <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">add</span>
         Thêm mới
@@ -170,8 +170,8 @@
               </span>
             </td>
             <td class="px-8 py-5 text-right">
-              <button class="text-primary hover:underline text-xs font-bold"
-                (click)="getAppointmentById(item.id)">View Details
+              <button class="text-primary hover:underline text-xs font-bold" (click)="getAppointmentById(item.id)">View
+                Details
               </button>
             </td>
           </tr>
@@ -195,7 +195,11 @@
   </section>
 
   <!-- Drawer component -->
-  <app-drawer-appointment *ngIf="isDrawerOpen" [appointment]="selectedAppointment"
-    (closeDrawer)="closeDrawer()">
+  <app-drawer-appointment *ngIf="isDrawerOpen" [appointment]="selectedAppointment" (closeDrawer)="closeDrawer()">
   </app-drawer-appointment>
+
+  @if (isFormOpen()) {
+  <app-appointment-create (close)="closeForm()" />
+  }
+
 </div>
