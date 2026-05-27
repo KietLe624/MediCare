@@ -1,3 +1,11 @@
+export interface PaginatedResponse<T> {
+  data: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 // QUERIES
 export interface AppointmentQueryParams {
   date?: string; // yyyy-MM-dd
@@ -17,11 +25,8 @@ export interface AppointmentQueryParams {
 export interface CreateAppointmentRequest {
   patientId: number;
   doctorId: number;
-
   appointmentDate: string; // yyyy-MM-dd
   startTime: string; // HH:mm:ss
-  endTime: string; // HH:mm:ss
-
   reason?: string;
   notes?: string;
 }

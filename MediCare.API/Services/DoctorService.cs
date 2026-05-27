@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediCare.API.Data;
-using MediCare.API.DTOs;
 using MediCare.API.Entities;
 using MediCare.API.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -181,7 +180,7 @@ namespace MediCare.API.Services
                 DayOfWeek = request.DayOfWeek,
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
-                //SlotDurationMinutes = request.SlotDurationMinutes,
+                SlotDurationMinutes = request.SlotDurationMinutes,
                 IsActive = request.IsActive,
                 CreatedAt = DateTime.UtcNow
             };
@@ -279,7 +278,7 @@ namespace MediCare.API.Services
                 }
             }).ToList();
 
-            
+
             return new PagedResponse<DoctorAppointmentResponse>
             {
                 Data = items,

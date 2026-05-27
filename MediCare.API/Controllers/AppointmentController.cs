@@ -28,7 +28,7 @@ namespace MediCare.API.Controllers
             var result = await _appointmentService.GetAllAsync(query);
             return Ok(result);
         }
-        [HttpGet("{appointmentId}")]
+        [HttpGet("{appointmentId:long}")]
         public async Task<IActionResult> GetById(long appointmentId)
         {
             var appointment = await _appointmentService.GetByIdAsync(appointmentId);
@@ -50,7 +50,7 @@ namespace MediCare.API.Controllers
         {
             var createdByUserId = GetCurrentUserId();
             var result = await _appointmentService.CreateAsync(request, createdByUserId);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { appointmentId = result.Id }, result);
         }
 
         [HttpPut("{appointmentId:long}")]

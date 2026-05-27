@@ -61,10 +61,10 @@ namespace MediCare.API.DTOs
         {
             [Required]
             public int Id { get; set; }
-            public string DayOfWeek { get; set; } // "Monday", "Tuesday", ...
+            public int DayOfWeek { get; set; } // "Monday", "Tuesday", ... 
             public TimeOnly StartTime { get; set; }
             public TimeOnly EndTime { get; set; }
-            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
+            public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
             [Required]
             public bool IsActive { get; set; }
         }
@@ -121,7 +121,7 @@ namespace MediCare.API.DTOs
             public TimeOnly EndTime { get; set; }
 
             //[Range(15, 120)]
-            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
+            public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
 
             public bool IsActive { get; set; } = true;
         }
@@ -169,7 +169,6 @@ namespace MediCare.API.DTOs
             public string? Reason { get; set; }
             public string? Notes { get; set; }
             public DateTime CreatedAt { get; set; }
-
             public PatientBriefResponse Patient { get; set; } = default!;
         }
         public class PatientBriefResponse

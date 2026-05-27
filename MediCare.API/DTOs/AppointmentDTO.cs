@@ -30,9 +30,6 @@ namespace MediCare.API.DTOs
             [Required(ErrorMessage = "Giờ bắt đầu là bắt buộc")]
             public TimeOnly StartTime { get; set; }
 
-            [Required(ErrorMessage = "Giờ kết thúc là bắt buộc")]
-            public TimeOnly EndTime { get; set; }
-
             [StringLength(255)]
             public string? Reason { get; set; }
 

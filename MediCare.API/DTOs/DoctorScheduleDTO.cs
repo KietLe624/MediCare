@@ -11,7 +11,7 @@ namespace MediCare.API.DTOs
             public DateTime Date { get; set; }
             public TimeOnly StartTime { get; set; }
             public TimeOnly EndTime { get; set; }
-            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
+            public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
             public bool IsAvailable { get; set; } // trạng thái lịch trình có sẵn hay không
         }
         public class CreateScheduleRequest
@@ -26,7 +26,7 @@ namespace MediCare.API.DTOs
             public TimeOnly EndTime { get; set; }
 
             //[Range(15, 120)]
-            //public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
+            public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
 
             public bool IsActive { get; set; } = true;
         }
@@ -44,7 +44,7 @@ namespace MediCare.API.DTOs
             public TimeOnly EndTime { get; set; }
 
             //[Range(15, 120)]
-            //public int SlotDurationMinutes { get; set; } = 30;
+            public int SlotDurationMinutes { get; set; } = 30;
 
             public bool IsActive { get; set; } = true;
         }

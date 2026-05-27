@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
 import { ClickOutside } from '../../../../core/shared/directives/click-outside';
-import { Appointment } from '../../../appointment/services/appointment';
+import { AppointmentService } from '../../../appointment/services/appointment';
 import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
 import { AppointmentResponse } from '../../../appointment/models/appointment.model';
 import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
@@ -17,7 +17,7 @@ import { AppointmentCreate } from '../../../appointment/components/appointment-c
 export class OverviewComponent {
   // SERVICES
   private dashboardService = inject(DashboardService);
-  private appointmentService = inject(Appointment);
+  private appointmentService = inject(AppointmentService);
   // OTHERS
   private changeDetector = inject(ChangeDetectorRef);
 
@@ -54,7 +54,7 @@ export class OverviewComponent {
 
   getAppointmentById(id: number) {
     console.log('Lấy thông tin cuộc hẹn với ID:', id);
-    this.appointmentService.getApppointmentById(id).subscribe({
+    this.appointmentService.getAppointmentById(id).subscribe({
       next: (data) => {
         console.log('Thông tin cuộc hẹn:', data);
         this.selectedAppointment = data as AppointmentResponse;
@@ -121,8 +121,6 @@ export class OverviewComponent {
   closeForm() {
     this.isFormOpen.set(false);
   }
-
-
 
   // HELPERS
   private formatNumber(value: number): string {

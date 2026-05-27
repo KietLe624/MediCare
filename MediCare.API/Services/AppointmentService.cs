@@ -18,7 +18,6 @@ namespace MediCare.API.Services
             _context = context;
             _logger = logger;
         }
-
         public async Task<PagedResponse<AppointmentSummaryResponse>> GetAllAsync(AppointmentQueryParams query)
         {
             var q = _context.Appointments
@@ -73,11 +72,11 @@ namespace MediCare.API.Services
         public async Task<AppointmentResponse> CreateAsync(
             CreateAppointmentRequest request, long createdByUserId)
         {
-            // Validate dữ liệu đầu vào
-            if (request.EndTime <= request.StartTime)
-                throw new BadHttpRequestException("Giờ kết thúc phải sau giờ bắt đầu");
+            // Lấy ngày hiện tại theo múi giờ VN UTC +7 
+            var vnZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var todayVN = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vnZone));
 
-            if (request.AppointmentDate < DateOnly.FromDateTime(DateTime.UtcNow))
+            if (request.AppointmentDate < todayVN)
                 throw new BadHttpRequestException("Không thể đặt lịch,vui lòng kiểm tra lại ngày đặt lịch");
 
             // Kiểm tra Patient tồn tại
@@ -100,16 +99,21 @@ namespace MediCare.API.Services
             var dayOfWeek = (int)request.AppointmentDate.DayOfWeek == 0
                 ? 7 : (int)request.AppointmentDate.DayOfWeek;
 
-            var hasSchedule = await _context.DoctorSchedules.AnyAsync(s =>
-                s.DoctorId == request.DoctorId &&
-                s.DayOfWeek == dayOfWeek &&
-                s.IsActive &&
-                s.StartTime <= request.StartTime &&
-                s.EndTime >= request.EndTime);
+            var schedule = await _context.DoctorSchedules
+                .FirstOrDefaultAsync(s =>
+                   s.DoctorId == request.DoctorId &&
+                   s.DayOfWeek == dayOfWeek &&
+                   s.IsActive &&
+                   s.StartTime <= request.StartTime &&
+                   s.EndTime > request.StartTime 
+                );
 
-            if (!hasSchedule)
+            if (schedule == null)
                 throw new BadHttpRequestException(
                     "Bác sĩ không có lịch làm việc vào khung giờ này");
+
+            // Tính thời gian kết thúc
+            var endTime = request.StartTime.Add(TimeSpan.FromMinutes(schedule.SlotDurationMinutes));
 
             // Kiểm tra double-booking — bác sĩ đã có appointment cùng ngày + giờ chưa
             var isDoubleBooked = await _context.Appointments.AnyAsync(a =>
@@ -129,7 +133,7 @@ namespace MediCare.API.Services
                 DoctorId = request.DoctorId,
                 AppointmentDate = request.AppointmentDate,
                 StartTime = request.StartTime,
-                EndTime = request.EndTime,
+                //EndTime = request.EndTime,
                 Status = "Scheduled",
                 Reason = request.Reason,
                 Notes = request.Notes,
@@ -336,7 +340,7 @@ namespace MediCare.API.Services
             Notes = a.Notes,
             CreatedAt = a.CreatedAt,
             UpdatedAt = a.UpdatedAt,
-            
+
             Patient = new PatientBriefResponse
             {
                 Id = a.Patient.Id,

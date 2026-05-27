@@ -19,7 +19,7 @@ namespace MediCare.API.Entities
         public TimeOnly StartTime { get; set; }
 
         public TimeOnly EndTime { get; set; }
-
+        public int SlotDurationMinutes { get; set; } = 30; // mặc định 30 phút
         public bool IsActive { get; set; } = true;
 
         [ForeignKey("DoctorId")]
