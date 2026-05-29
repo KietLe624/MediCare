@@ -3,19 +3,29 @@ import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 // services
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentService } from '../../../appointment/services/appointment';
+import { DoctorService } from '../../../doctor/services/doctor';
 // Models
-import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
+import { AppointmentToday, OverviewResponse } from '../../models/dashboard.model';
 import { AppointmentResponse } from '../../../appointment/models/appointment.model';
+import { DoctorAppointmentResponse } from '../../../doctor/models/doctor.model';
 import { ClickOutside } from '../../../../core/shared/directives/click-outside';
 // Component
 import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
 import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
+import { VisitChartComponent } from '../visit-chart/visit-chart';
+import { DepartmentChartComponent } from '../department-chart/department-chart';
+import { RevenueChartComponent } from '../revenue-chart/revenue-chart';
 // Helper
 import { AppointmentStatusHelper, StatusConfig } from '../../../../core/shared/helper/appointment-status.hepler';
+// Chart
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexStroke, ApexTooltip, ApexXAxis, ChartComponent } from 'ng-apexcharts';
+import { AdminLayout } from "../../../../core/layouts/pages/admin-layout/admin-layout";
+
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, ClickOutside, DrawerAppointment, AppointmentCreate],
+  imports: [CommonModule, ClickOutside, DrawerAppointment, AppointmentCreate, VisitChartComponent, DepartmentChartComponent, RevenueChartComponent, NgApexchartsModule],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
 })
@@ -143,9 +153,14 @@ export class OverviewComponent {
         accent: 'tone-primary',
         chip: 'PEAK',
         icon: 'visits',
+
       },
     ];
   }
+
+  // Charts
+
+
 
   // OPEN APPOINTMENT FORM
   isFormOpen = signal(false);
@@ -163,7 +178,7 @@ export class OverviewComponent {
     return new Intl.NumberFormat('en-US').format(value ?? 0);
   }
 
-  private mapAppointment(item: AppointmentTodayDto) {
+  private mapAppointment(item: AppointmentToday) {
     return {
       id: item.id,
       initials: this.getInitials(item.patientName),

@@ -6,6 +6,14 @@ namespace MediCare.API.DTOs
 {
     public class DoctorDTO
     {
+        public class PagedResponse<T>
+        {
+            public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
+            public int TotalCount { get; set; }
+            public int Page { get; set; }
+            public int PageSize { get; set; }
+            public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+        }
         public class DoctorQueryParams
         {
             public string? Search { get; set; }  // tìm theo tên, chuyên khoa, phòng ban, 
@@ -100,14 +108,6 @@ namespace MediCare.API.DTOs
             public decimal? ConsultationFee { get; set; }
             public bool? IsAvailable { get; set; }
             //public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
-        }
-        public class PagedResponse<T>
-        {
-            public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
-            public int TotalCount { get; set; }
-            public int Page { get; set; }
-            public int PageSize { get; set; }
-            public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
         }
         public class CreateScheduleRequest
         {

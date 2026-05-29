@@ -16,7 +16,7 @@ export interface OverviewResponse {
   doctorsAvailable: number;
 }
 
-export interface AppointmentTodayDto {
+export interface AppointmentToday {
   id: number;
   startTime: string;
   endTime: string;
@@ -31,4 +31,24 @@ export interface BriefPatientInfo {
   HUID: string;
   fullname: string;
   phonenumber: string;
+}
+// For visit chart
+export interface VisitByDate {
+  date: string;
+  count: number;
+}
+
+export interface PatientsByDepartment {
+  departmentName: string;
+  count: number;
+}
+
+export interface RevenueByDate {
+  date: string;
+  revenue: number;
+}
+
+export interface RevenueByMonth {
+  month: string;
+  revenue: number;
 }

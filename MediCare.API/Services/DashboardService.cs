@@ -185,7 +185,6 @@ namespace MediCare.API.Services
         }
 
         // REVENUE BY DATE
-
         public async Task<List<RevenueByDateResponse>> GetRevenueByDateAsync(int days)
         {
             days = days <= 7 ? 7 : 30;

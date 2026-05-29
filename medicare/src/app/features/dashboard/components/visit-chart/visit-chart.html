@@ -1,0 +1,27 @@
+<div class="lg:col-span-2 glass-card rounded-2xl p-8 light-leak-shadow">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h3 class="text-headline-md font-bold text-on-surface">Lượt khám bệnh theo thời gian</h3>
+    </div>
+    <div class="flex bg-surface-container-low p-1 rounded-lg">
+      <button class="px-4 py-1.5 text-body-sm rounded-md transition-all duration-200"
+        [ngClass]="selectedRange === 7 ? 'bg-white text-primary font-bold shadow-sm' : 'text-on-surface-variant hover:text-on-surface font-medium'"
+        (click)="changeRange(7)">
+        7d
+      </button>
+      <button class="px-4 py-1.5 text-body-sm rounded-md transition-all duration-200"
+        [ngClass]="selectedRange === 30 ? 'bg-white text-primary font-bold shadow-sm' : 'text-on-surface-variant hover:text-on-surface font-medium'"
+        (click)="changeRange(30)">
+        30d
+      </button>
+    </div>
+  </div>
+  <div class="relative h-[320px] w-full">
+    <div class="relative">
+      <apx-chart #chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+        [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!" [dataLabels]="chartOptions.dataLabels!"
+        [grid]="chartOptions.grid!" [fill]="chartOptions.fill! " [colors]="chartOptions.colors!">
+      </apx-chart>
+    </div>
+  </div>
+</div>
