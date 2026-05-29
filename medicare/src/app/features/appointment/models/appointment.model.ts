@@ -43,10 +43,7 @@ export interface UpdateAppointmentRequest {
 
 export interface RescheduleAppointmentRequest {
   newDate: string;
-
   newStartTime: string;
-  newEndTime: string;
-
   reason?: string;
 }
 

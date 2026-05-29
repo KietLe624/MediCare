@@ -134,6 +134,13 @@ body {
   color: #111827;
 }
 
+html.scroll-locked,
+body.scroll-locked {
+  overflow: hidden;
+  height: 100%;
+  touch-action: none;
+}
+
 /* =========================
    REUSABLE COMPONENT CLASSES
 ========================= */

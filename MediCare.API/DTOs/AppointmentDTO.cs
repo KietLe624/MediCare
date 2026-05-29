@@ -63,8 +63,8 @@ namespace MediCare.API.DTOs
             [Required(ErrorMessage = "Giờ bắt đầu mới là bắt buộc")]
             public TimeOnly NewStartTime { get; set; }
 
-            [Required(ErrorMessage = "Giờ kết thúc mới là bắt buộc")]
-            public TimeOnly NewEndTime { get; set; }
+            //[Required(ErrorMessage = "Giờ kết thúc mới là bắt buộc")]
+            //public TimeOnly NewEndTime { get; set; }
 
             [StringLength(500)]
             public string? Reason { get; set; } // lý do đổi lịch

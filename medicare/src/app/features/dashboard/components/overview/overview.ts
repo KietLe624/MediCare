@@ -1,12 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+// services
 import { DashboardService } from '../../services/dashboard';
-import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
-import { ClickOutside } from '../../../../core/shared/directives/click-outside';
 import { AppointmentService } from '../../../appointment/services/appointment';
-import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
+// Models
+import { AppointmentTodayDto, OverviewResponse } from '../../models/dashboard.model';
 import { AppointmentResponse } from '../../../appointment/models/appointment.model';
+import { ClickOutside } from '../../../../core/shared/directives/click-outside';
+// Component
+import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
 import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
+// Helper
+import { AppointmentStatusHelper, StatusConfig } from '../../../../core/shared/helper/appointment-status.hepler';
 
 @Component({
   selector: 'app-overview',
@@ -39,6 +44,7 @@ export class OverviewComponent {
     this.dashboardService.getAppointmentsToday().subscribe({
       next: (items) => {
         this.appointments = items.map((item) => this.mapAppointment(item));
+        this.thisAppoitntment.set(this.appointments);
         this.changeDetector.markForCheck();
       },
       error: (error) => {
@@ -51,7 +57,7 @@ export class OverviewComponent {
   isDrawerOpen = false;
   selectedAppointment: AppointmentResponse | null = null;
 
-
+  // sidebar view detail appointment
   getAppointmentById(id: number) {
     console.log('Lấy thông tin cuộc hẹn với ID:', id);
     this.appointmentService.getAppointmentById(id).subscribe({
@@ -67,12 +73,42 @@ export class OverviewComponent {
     });
   }
 
+  // filter
+  thisAppoitntment = signal<any[]>([]);
+  selectedStatus = signal<string>('All');
+
+  // method filler
+  fillerAppointmentByStatus(status: string) {
+    this.selectedStatus.set(status);
+    if (!status || status === 'All') {
+      this.thisAppoitntment.set(this.appointments);
+      return;
+    }
+    this.thisAppoitntment.set(
+      this.appointments.filter(
+        (item) => item.status?.toLowerCase() === status.toLowerCase()
+      )
+    );
+  }
+
+  onStatusFilter(status: string) {
+    this.fillerAppointmentByStatus(status);
+    // this.currentPage = 1;
+    this.changeDetector.markForCheck();
+  }
 
   closeDrawer() {
     this.isDrawerOpen = false;
     this.selectedAppointment = null;
   }
 
+  onRefreshData(updatedAppointment: AppointmentResponse) {
+    const index = this.appointments.findIndex(item => item.id === updatedAppointment.id);
+    if (index !== -1) {
+      this.appointments[index] = updatedAppointment;
+      this.appointments = [...this.appointments];
+    }
+  }
 
   private buildStats(data: OverviewResponse) {
     return [
@@ -169,13 +205,16 @@ export class OverviewComponent {
 
   private statusTone(status: string): string {
     const normalized = status.toLowerCase();
-    if (normalized.includes('confirm')) {
+    if (normalized.includes('Completed') || normalized.includes('Complete')) {
       return 'badge-success';
     }
-    if (normalized.includes('complete')) {
-      return 'badge-primary';
+    if (normalized.includes('Confirmed') || normalized.includes('Confirm')) {
+      return 'badge-warning';
     }
-    if (normalized.includes('cancel') || normalized.includes('reject')) {
+    if (normalized.includes('Scheduled') || normalized.includes('Schedule')) {
+      return 'badge-warning';
+    }
+    if (normalized.includes('Cancelled') || normalized.includes('reject')) {
       return 'badge-danger';
     }
     if (normalized.includes('urgent') || normalized.includes('high')) {
@@ -184,4 +223,8 @@ export class OverviewComponent {
     return 'badge-neutral';
   }
 
+  // helper: badge status
+  getStatusConfig(status: string): StatusConfig {
+    return AppointmentStatusHelper.getConfig(status);
+  }
 }

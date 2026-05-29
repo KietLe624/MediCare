@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CreateAppointmentRequest } from '../models/appointment.model';
+import { CreateAppointmentRequest, RescheduleAppointmentRequest } from '../models/appointment.model';
 import { catchError, Observable, throwError } from 'rxjs';
 
 
@@ -33,7 +33,32 @@ export class AppointmentService {
     }
   }
 
+  updateAppointment(id: number, request: CreateAppointmentRequest): Observable<any> {
+    return this.http.put(`${this.appointmentUrl}/${id}`, request).pipe(
+      catchError((error) => {
+        console.error('Lỗi khi cập nhật cuộc hẹn:', error);
+        return throwError(() => new Error('Không thể cập nhật cuộc hẹn. Vui lòng thử lại sau.'));
+      })
+    );
+  }
 
+  confirmAppointment(id: number): Observable<any> {
+    return this.http.patch(`${this.appointmentUrl}/${id}/confirm`, {}).pipe(
+      catchError((error) => {
+        console.error('Lỗi khi xác nhận cuộc hẹn:', error);
+        return throwError(() => new Error('Không thể xác nhận cuộc hẹn. Vui lòng thử lại sau.'));
+      })
+    );
+  }
+
+  reScheduleAppointment(id: number, request: RescheduleAppointmentRequest): Observable<any> {
+    return this.http.patch(`${this.appointmentUrl}/${id}/reschedule`, request).pipe(
+      catchError((error) => {
+        console.error('Lỗi khi đặt lại cuộc hẹn:', error);
+        return throwError(() => new Error('Không thể đặt lại cuộc hẹn. Vui lòng thử lại sau.'));
+      })
+    );
+  }
 
 }
 

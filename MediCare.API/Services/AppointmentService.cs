@@ -253,9 +253,6 @@ namespace MediCare.API.Services
 
             EnsureAppointmentIsModifiable(appointment);
 
-            if (request.NewEndTime <= request.NewStartTime)
-                throw new BadHttpRequestException("Giờ kết thúc phải sau giờ bắt đầu");
-
             if (request.NewDate < DateOnly.FromDateTime(DateTime.UtcNow))
                 throw new BadHttpRequestException("Không thể đặt lịch trong quá khứ");
 
@@ -279,7 +276,7 @@ namespace MediCare.API.Services
                                             : $"[Đổi lịch] {request.Reason}";
             appointment.AppointmentDate = request.NewDate;
             appointment.StartTime = request.NewStartTime;
-            appointment.EndTime = request.NewEndTime;
+            //appointment.EndTime = request.NewEndTime;
             appointment.UpdatedBy = updatedByUserId;
             appointment.UpdatedAt = DateTime.UtcNow;
 

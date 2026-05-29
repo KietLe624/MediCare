@@ -1,128 +1,162 @@
 <ng-container *ngIf="appointment as data">
   <div class="fixed inset-0 z-[200]">
-    <div class="drawer-backdrop fixed inset-0 w-screen h-screen bg-black/40 z-[200] backdrop-blur-[2px]"
+    <div class="drawer-backdrop fixed inset-0 w-screen h-screen bg-black/40 z-[200] backdrop-blur-sm"
       (click)="onClose()"></div>
 
     <div
-      class="drawer-content fixed top-0 right-0 h-screen w-full md:w-[300px] lg:w-[35%] max-w-full bg-white z-[210] shadow-2xl flex flex-col border-l border-slate-200 animate-slide-in-right overflow-hidden">
-
-      <div
-        class="glass-header sticky top-0 z-10 px-6 py-5 border-b border-outline-variant/10 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <button
-            class="p-2 -ml-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors"
+      class="drawer-content fixed top-0 right-0 h-screen w-full md:w-[600px] bg-white z-[210] shadow-2xl flex flex-col animate-slide-in-right overflow-y-auto">
+      <div class="px-6 py-5 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2 text-slate-600">
+          <button class="p-1.5 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center"
             (click)="onClose()">
-            <span class="material-symbols-outlined">close</span>
+            <span class="material-symbols-outlined text-[20px]">close</span>
           </button>
-          <h2 class="text-xl font-bold text-on-surface">Chi tiết lịch hẹn</h2>
+          <h2 class="text-[15px] font-bold text-slate-800">
+            Chi tiết lịch hẹn
+          </h2>
         </div>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+
+        <span
+          class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest"
           [ngClass]="{
-              'bg-green-100 text-green-800': appointment.status === 'Confirmed',
-              'bg-yellow-100 text-yellow-800': appointment.status === 'Pending',
-              'bg-red-100 text-red-800': appointment.status === 'Cancelled'
-            }">
-          {{ appointment.status }}
+            'bg-emerald-100 text-emerald-700': data.status === 'Confirmed',
+            'bg-amber-100 text-amber-700':
+              data.status === 'Pending' || data.status === 'Scheduled',
+            'bg-rose-100 text-rose-700': data.status === 'Cancelled',
+          }">
+          {{ data.status }}
         </span>
       </div>
 
-      <div class="flex-1 overflow-y-auto px-8 py-8 space-y-10">
+      <div class="flex-1 overflow-y-auto px-6 pb-8 space-y-6">
+        <section class="flex items-center gap-4">
+          <div
+            class="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xl shrink-0">
+            {{ data.patient.fullName?.charAt(0)?.toUpperCase() || "-" }}
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">
+              {{ data.patient.fullName }}
+            </h3>
+            <p class="text-slate-500 font-medium text-xs mt-0.5">
+              Mã BN: #{{ data.patient.uhid }}
+            </p>
+          </div>
+        </section>
 
-        <section class="flex flex-col items-center text-center">
-          <div class="relative mb-4">
-            <div
-              class="size-24 rounded-full border-4 border-surface shadow-md overflow-hidden bg-primary-fixed flex items-center justify-center text-primary text-2xl font-bold">
-              <!-- <img *ngIf="appointment.patient['avatarUrl']" [src]="appointment.patient['avatarUrl']" -->
-              alt="Patient Avatar" class="w-full h-full object-cover" />
-              <!-- <span *ngIf="!appointment.patient['avatarUrl']">{{ appointment.patient['name']?.charAt(0) }}</span> -->
+        <section class="grid grid-cols-3 gap-3">
+          <div
+            class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 shadow-sm shadow-slate-100/50">
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              <span class="material-symbols-outlined text-[14px] text-red-400">water_drop</span>
+              Nhóm máu
+            </div>
+            <div class="text-sm font-bold text-slate-800">
+              {{ data.patient.bloodType || "--" }}
             </div>
           </div>
 
-          <h3 class="text-2xl font-bold text-on-surface">{{ data.patient.fullName }}</h3>
-          <p class="text-on-surface-variant font-medium text-sm">Mã BN: #{{ data.patient.uhid }}</p>
+          <div
+            class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 shadow-sm shadow-slate-100/50">
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              <span class="material-symbols-outlined text-[14px] text-emerald-500">person</span>
+              Tuổi
+            </div>
+            <div class="text-sm font-bold text-slate-800">
+              {{ data.patient.age || "--" }}
+            </div>
+          </div>
 
-          <div class="grid grid-cols-3 gap-4 w-full mt-6">
-            <div class="bg-surface-container-low p-3 rounded-xl">
-              <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Nhóm máu</div>
-              <div class="text-lg font-bold text-primary">{{ data.patient.bloodType || '--' }}</div>
+          <div
+            class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 shadow-sm shadow-slate-100/50">
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              <span class="material-symbols-outlined text-[14px] text-blue-400">transgender</span>
+              Giới tính
             </div>
-            <div class="bg-surface-container-low p-3 rounded-xl">
-              <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Tuổi</div>
-              <div class="text-lg font-bold text-primary">{{ data.patient.age || '--' }}</div>
-            </div>
-            <div class="bg-surface-container-low p-3 rounded-xl">
-              <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Giới tính</div>
-              <!-- <div class="text-lg font-bold text-primary">{{ appointment.patient['gender'] || '--' }}</div> -->
+            <div class="text-sm font-bold text-slate-800">
+              {{ data.patient.gender || "--" }}
             </div>
           </div>
         </section>
 
-        <section class="space-y-6">
-
-          <div class="flex gap-4">
-            <div class="text-primary mt-1">
-              <span class="material-symbols-outlined">calendar_month</span>
+        <section class="space-y-3 pt-2">
+          <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 flex gap-4">
+            <div class="mt-0.5 text-blue-500">
+              <span class="material-symbols-outlined text-[20px]">calendar_month</span>
             </div>
             <div>
-              <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Thời gian</h4>
-              <p class="text-on-surface font-semibold text-lg">
-                {{ appointment.appointmentDate | date:'dd/MM/yyyy' }}, {{ appointment.startTime }} - {{
-                appointment.endTime }}
+              <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                Thời gian
+              </h4>
+              <p class="text-slate-800 font-semibold text-sm">
+                {{ data.appointmentDate | date: "dd/MM/yyyy" }},
+                {{ data.startTime }} - {{ data.endTime || "00:00:00" }}
               </p>
             </div>
           </div>
 
-          <div class="flex gap-4">
-            <div class="text-primary mt-1">
-              <span class="material-symbols-outlined">stethoscope</span>
+          <div class="bg-purple-50/50 border border-purple-100 rounded-2xl p-4 flex gap-4">
+            <div class="mt-0.5 text-purple-500">
+              <span class="material-symbols-outlined text-[20px]">stethoscope</span>
             </div>
             <div>
-              <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Bác sĩ phụ trách</h4>
-              <p class="text-on-surface font-semibold text-lg">Bs. {{ appointment.doctor.fullName }}</p>
-              <p class="text-sm text-on-surface-variant">Khoa {{ appointment.department.name }}</p>
+              <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                Bác sĩ phụ trách
+              </h4>
+              <p class="text-slate-800 font-bold text-sm">
+                Bs. {{ data.doctor.fullName }}
+              </p>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">
+                Khoa {{ data.department.name || "==" }}
+              </p>
             </div>
           </div>
 
-          <div *ngIf="appointment.reason" class="bg-surface-container-low p-5 rounded-xl border-l-4 border-primary">
-            <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Lý do khám</h4>
-            <p class="text-on-surface leading-relaxed">{{ appointment.reason }}</p>
+          <div class="bg-cyan-50/30 border border-cyan-100 rounded-2xl p-4">
+            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+              Lý do khám
+            </h4>
+            <p class="text-slate-800 text-sm font-medium">
+              {{ data.reason || "Không có lý do cụ thể" }}
+            </p>
           </div>
 
-          <div *ngIf="appointment.notes" class="space-y-2">
-            <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2">
-              <span class="material-symbols-outlined text-[16px]">description</span>
+          <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+            <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">
               Ghi chú lâm sàng
             </h4>
-            <div
-              class="bg-surface-container-low p-5 rounded-xl text-sm leading-relaxed text-on-surface-variant italic border border-outline-variant/10">
-              "{{ appointment.notes }}"
-            </div>
+            <p class="text-slate-800 text-sm font-medium">
+              "{{ data.notes || "Không có" }}"
+            </p>
           </div>
-
         </section>
       </div>
 
-      <div class="p-6 bg-surface-container-low border-t border-outline-variant/10 space-y-4">
-        <button
-          class="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
-          <span class="material-symbols-outlined">how_to_reg</span>
+      <div class="p-6 bg-white border-t border-slate-100 space-y-3 shrink-0">
+        <button (click)="confirmAppointment()"
+          class="w-full bg-blue-500 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 text-sm">
+          <span class="material-symbols-outlined text-[18px]">how_to_reg</span>
           Xác nhận Check-in
         </button>
+
         <div class="grid grid-cols-2 gap-3">
           <button
-            class="bg-surface-container-highest text-on-surface py-3 rounded-xl font-bold text-sm border border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+            class="bg-white text-blue-600 border border-blue-200 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-50 transition-colors">
             Đổi lịch
           </button>
           <button
-            class="bg-surface-container-highest text-on-surface py-3 rounded-xl font-bold text-sm border border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+            class="bg-white text-blue-600 border border-blue-200 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-50 transition-colors">
             Sửa thông tin
           </button>
         </div>
-        <button
-          class="w-full text-primary font-bold text-sm py-2 hover:underline decoration-2 underline-offset-4 flex items-center justify-center gap-1">
-          Xem hồ sơ bệnh án đầy đủ
-          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-        </button>
+
+        <div class="pt-2">
+          <button
+            class="w-full text-blue-600 font-bold text-xs py-2 hover:underline decoration-2 underline-offset-4 flex items-center justify-center gap-1">
+            Xem hồ sơ bệnh án đầy đủ
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
