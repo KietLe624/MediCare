@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 // Models
-import { DoctorLookupResponse } from '../models/doctor.model';
+import { DoctorLookupResponse, DoctorAppointmentResponse } from '../models/doctor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,15 @@ export class DoctorService {
         }
       }
     );
+  }
+
+  getAppointmentByDoctor(doctorId: number) {
+    try {
+      return this.http.get<DoctorAppointmentResponse[]>(`${this.doctorUrl}/${doctorId}/appointments`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu cuộc hẹn của bác sĩ:', error);
+      throw error;
+    }
   }
 
 }

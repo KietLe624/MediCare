@@ -1,0 +1,42 @@
+<div class="glass-card rounded-2xl p-8">
+
+  <div class="flex justify-between items-center mb-6">
+
+    <div>
+      <h3 class="text-xl font-bold">
+        Doanh thu
+      </h3>
+
+      <p class="text-sm text-slate-500">
+        Phân tích doanh thu theo thời gian
+      </p>
+    </div>
+
+    <div class="flex bg-slate-100 p-1 rounded-lg">
+
+      <button (click)="changeRange(7)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 7">
+
+        7d
+      </button>
+
+      <button (click)="changeRange(30)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 30">
+
+        30d
+      </button>
+
+      <button (click)="changeRange(365)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 365">
+
+        12m
+      </button>
+
+    </div>
+
+  </div>
+
+  <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+    [yaxis]="chartOptions.yaxis!" [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
+    [dataLabels]="chartOptions.dataLabels!" [grid]="chartOptions.grid!" [fill]="chartOptions.fill!"
+    [colors]="chartOptions.colors!">
+  </apx-chart>
+
+</div>

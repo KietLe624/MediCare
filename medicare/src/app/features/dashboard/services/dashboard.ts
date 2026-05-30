@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AppointmentTodayDto, OverviewResponse } from '../models/dashboard.model';
+import { AppointmentToday, OverviewResponse, PatientsByDepartment, RevenueByDate, VisitByDate } from '../models/dashboard.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,16 +18,42 @@ export class DashboardService {
     try {
       return this.http.get<OverviewResponse>(`${this.dashboardUrl}/overview`);
     } catch (error) {
-      console.error('Error fetching dashboard overview:', error);
+      console.error('Không lấy được dữ liệu tổng quan:', error);
       throw error;
     }
   }
 
-  getAppointmentsToday(): Observable<AppointmentTodayDto[]> {
+  getAppointmentsToday(): Observable<AppointmentToday[]> {
     try {
-      return this.http.get<AppointmentTodayDto[]>(`${this.dashboardUrl}/appointments-today`);
+      return this.http.get<AppointmentToday[]>(`${this.dashboardUrl}/appointments-today`);
     } catch (error) {
-      console.error('Error fetching today\'s appointments:', error);
+      console.error('Không lấy được dữ liệu cuộc hẹn hôm nay:', error);
+      throw error;
+    }
+  }
+
+  getVisitByDate(days: number): Observable<VisitByDate[]> {
+    try {
+      return this.http.get<VisitByDate[]>(`${this.dashboardUrl}/visits/by-date?days=${days}`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu thăm khám theo ngày:', error);
+      throw error;
+    }
+  }
+
+  getVisitByDepartment(): Observable<PatientsByDepartment[]> {
+    try {
+      return this.http.get<PatientsByDepartment[]>(`${this.dashboardUrl}/patients/by-department`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu thăm khám theo phòng ban:', error);
+      throw error;
+    }
+  }
+  getRevenueByDate(days: number = 7): Observable<RevenueByDate[]> {
+    try {
+      return this.http.get<RevenueByDate[]>(`${this.dashboardUrl}/revenue/by-date?days=${days}`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu doanh thu theo ngày:', error);
       throw error;
     }
   }

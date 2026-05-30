@@ -22,7 +22,6 @@ export interface DoctorScheduleResponse {
   isActive: boolean;
 }
 
-
 export interface DoctorAppointmentResponse {
   id: number;
   appointmentDate: string; // YYYY-MM-DD
