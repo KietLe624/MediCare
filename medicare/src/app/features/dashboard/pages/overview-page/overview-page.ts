@@ -3,23 +3,35 @@ import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 // services
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentService } from '../../../appointment/services/appointment';
+import { DoctorService } from '../../../doctor/services/doctor';
 // Models
-import { OverviewResponse, AppointmentToday } from '../../models/dashboard.model';
+import { AppointmentToday, OverviewResponse } from '../../models/dashboard.model';
+import { AppointmentResponse } from '../../../appointment/models/appointment.model';
+import { DoctorAppointmentResponse } from '../../../doctor/models/doctor.model';
+import { ClickOutside } from '../../../../core/shared/directives/click-outside';
+// Component
+import { DrawerAppointmentComponent } from '../../components/drawer-appointment/drawer-appointment';
+import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
 // Helper
 import { AppointmentStatusHelper, StatusConfig } from '../../../../core/shared/helper/appointment-status.hepler';
 // Chart
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { VisitChartComponent } from '../../components/visit-chart/visit-chart';
+import { DepartmentChartComponent } from '../../components/department-chart/department-chart';
+import { RevenueChartComponent } from '../../components/revenue-chart/revenue-chart';
+import { OverviewComponent } from '../../components/overview/overview';
+import { DoctorAppointmentChart } from "../../components/doctor-appointment-chart/doctor-appointment-chart";
 
 
 @Component({
-  selector: 'app-overview',
-  imports: [CommonModule, NgApexchartsModule],
-  templateUrl: './overview.html',
-  styleUrl: './overview.scss',
+  selector: 'app-overview-page',
+  imports: [CommonModule, OverviewComponent, VisitChartComponent, DepartmentChartComponent, RevenueChartComponent, DrawerAppointmentComponent, AppointmentCreate, ClickOutside, DoctorAppointmentChart],
+  templateUrl: './overview-page.html',
+  styleUrl: './overview-page.scss',
 })
-export class OverviewComponent {
+export class OverviewPageComponent {
   // SERVICES
   private dashboardService = inject(DashboardService);
+  private appointmentService = inject(AppointmentService);
   // OTHERS
   private changeDetector = inject(ChangeDetectorRef);
 
@@ -28,15 +40,6 @@ export class OverviewComponent {
   isFilterOpen: boolean = false;
 
   constructor() {
-    this.dashboardService.getOverview().subscribe({
-      next: (data) => {
-        this.stats = this.buildStats(data);
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        console.error('Lỗi không lấy được dữ liệu:', error);
-      },
-    });
 
     this.dashboardService.getAppointmentsToday().subscribe({
       next: (items) => {
@@ -50,6 +53,25 @@ export class OverviewComponent {
     });
   }
 
+  // Appointment drawer
+  isDrawerOpen = false;
+  selectedAppointment: AppointmentResponse | null = null;
+
+  // sidebar view detail appointment
+  getAppointmentById(id: number) {
+    console.log('Lấy thông tin cuộc hẹn với ID:', id);
+    this.appointmentService.getAppointmentById(id).subscribe({
+      next: (data) => {
+        console.log('Thông tin cuộc hẹn:', data);
+        this.selectedAppointment = data as AppointmentResponse;
+        this.isDrawerOpen = true;
+        this.changeDetector.markForCheck();
+      },
+      error: (error) => {
+        console.error('Lỗi không lấy được thông tin cuộc hẹn:', error);
+      },
+    });
+  }
 
   // filter
   thisAppoitntment = signal<any[]>([]);
@@ -69,45 +91,24 @@ export class OverviewComponent {
     );
   }
 
-
-  private buildStats(data: OverviewResponse) {
-    return [
-      {
-        title: 'Tổng bệnh nhân',
-        value: this.formatNumber(data.totalPatients),
-        note: `${this.formatNumber(data.newPatientsToday)} mới hôm nay`,
-        accent: 'tone-primary',
-        chip: 'UPTREND',
-        icon: 'patients',
-      },
-      {
-        title: 'Tổng bác sĩ',
-        value: this.formatNumber(data.doctorsAvailable),
-        note: 'Số bác sĩ đang làm việc',
-        accent: 'tone-secondary',
-        chip: 'STEADY',
-        icon: 'doctors',
-      },
-      {
-        title: "Lịch hẹn hôm nay",
-        value: this.formatNumber(data.appointmentsToday),
-        note: `${this.formatNumber(data.upcomingAppointments)} sắp tới`,
-        accent: 'tone-tertiary',
-        chip: 'TODAY',
-        icon: 'appointments',
-      },
-      {
-        title: 'Số lượt khám hôm nay',
-        value: this.formatNumber(data.completedToday),
-        note: `Revenue MTD:`,
-        accent: 'tone-primary',
-        chip: 'PEAK',
-        icon: 'visits',
-
-      },
-    ];
+  onStatusFilter(status: string) {
+    this.fillerAppointmentByStatus(status);
+    // this.currentPage = 1;
+    this.changeDetector.markForCheck();
   }
 
+  closeDrawer() {
+    this.isDrawerOpen = false;
+    this.selectedAppointment = null;
+  }
+
+  onRefreshData(updatedAppointment: AppointmentResponse) {
+    const index = this.appointments.findIndex(item => item.id === updatedAppointment.id);
+    if (index !== -1) {
+      this.appointments[index] = updatedAppointment;
+      this.appointments = [...this.appointments];
+    }
+  }
   // Charts
 
   // OPEN APPOINTMENT FORM
@@ -121,10 +122,7 @@ export class OverviewComponent {
     this.isFormOpen.set(false);
   }
 
-  // HELPERS
-  private formatNumber(value: number): string {
-    return new Intl.NumberFormat('en-US').format(value ?? 0);
-  }
+  // HELPER
 
   private mapAppointment(item: AppointmentToday) {
     return {
@@ -138,6 +136,7 @@ export class OverviewComponent {
       tone: this.statusTone(item.status),
     };
   }
+
 
   private getInitials(name: string): string {
     return name

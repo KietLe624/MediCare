@@ -38,7 +38,7 @@
 
     // ─── PATIENT STATS ────────────────────────────────────────
 
-    /// <summary>Số bệnh nhân theo khoa — dùng cho biểu đồ cột</summary>
+    /// <summary>Số bệnh nhân theo khoa</summary>
     public class PatientsByDepartmentResponse
     {
         public string DepartmentName { get; set; } = default!;
@@ -54,7 +54,7 @@
 
     // ─── REVENUE STATS ────────────────────────────────────────
 
-    /// <summary>Doanh thu theo ngày — dùng cho biểu đồ đường</summary>
+    /// <summary>Doanh thu theo ngày</summary>
     public class RevenueByDateResponse
     {
         public DateOnly Date { get; set; }
@@ -82,5 +82,13 @@
 
         // Lịch hẹn sắp tới hôm nay
         public List<AppointmentTodayResponse> UpcomingToday { get; set; } = new();
+    }
+
+    public class DoctorAppointmentStatsResponse
+    {
+        public long DoctorId { get; set; }
+        public string DoctorName { get; set; } = string.Empty;
+        public string DepartmentName { get; set; } = string.Empty;
+        public int AppointmentCount { get; set; }
     }
 }

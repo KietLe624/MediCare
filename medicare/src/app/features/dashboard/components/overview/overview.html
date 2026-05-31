@@ -1,266 +1,29 @@
-<div class="space-y-12">
-  <section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-    <div>
-      <h2 class="font-headline-lg text-headline-lg text-on-surface">Tổng quan hệ thống</h2>
-      <p class="text-on-surface-variant font-body-md">Chào buổi sáng. Đây là những gì đang diễn ra hôm nay.</p>
-    </div>
-    <div class="flex flex-wrap gap-3">
-      <button
-        class="px-4 py-2 bg-white border border-outline-variant rounded-xl font-label-md hover:bg-surface-container-low transition-colors">
-        Tạo báo cáo
-      </button>
-      <button (click)="openForm()"
-        class="px-4 py-2 bg-primary text-white rounded-xl font-label-md active:scale-95 transition-transform flex items-center gap-2">
-        <span class="material-symbols-outlined text-sm" style="font-variation-settings: &quot;FILL&quot; 1">add</span>
-        Thao tác nhanh
-      </button>
-    </div>
-  </section>
-
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div *ngFor="let stat of stats" class="glass-card rounded-2xl p-4 light-leak-shadow">
-      <div class="flex justify-between items-start mb-4">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" [ngClass]="{
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div *ngFor="let stat of stats" class="glass-card rounded-2xl p-4 light-leak-shadow">
+    <div class="flex justify-between items-start mb-4">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center" [ngClass]="{
             'bg-primary/10 text-primary': stat.icon === 'patients' || stat.icon === 'visits',
             'bg-secondary-container/30 text-secondary': stat.icon === 'doctors',
             'bg-tertiary-container/10 text-tertiary': stat.icon === 'appointments'
           }">
-          <span class="material-symbols-outlined">
-            {{
-            stat.icon === 'patients'
-            ? 'group'
-            : stat.icon === 'doctors'
-            ? 'stethoscope'
-            : stat.icon === 'appointments'
-            ? 'calendar_month'
-            : 'monitoring'
-            }}
-          </span>
-        </div>
-        <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
-          {{ stat.chip }}
+        <span class="material-symbols-outlined">
+          {{
+          stat.icon === 'patients'
+          ? 'group'
+          : stat.icon === 'doctors'
+          ? 'stethoscope'
+          : stat.icon === 'appointments'
+          ? 'calendar_month'
+          : 'monitoring'
+          }}
         </span>
       </div>
-      <p class="text-on-surface-variant font-label-md uppercase tracking-wider mb-1">{{ stat.title }}</p>
-      <h3 class="text-headline-md font-bold text-on-surface">{{ stat.value }}</h3>
-      <p class="text-[11px] text-on-surface-variant mt-2">{{ stat.note }}</p>
-      <div class="mt-4 h-10 w-full">
-        <!-- <apx-chart [series]="stat.sparkline.series" [chart]="stat.sparkline.chart" [stroke]="stat.sparkline.stroke"
-          [fill]="stat.sparkline.fill" [colors]="stat.sparkline.colors">
-        </apx-chart> -->
-      </div>
+      <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+        {{ stat.chip }}
+      </span>
     </div>
-  </section>
-
-  <section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-    <!-- visit chart -->
-    <app-visit-chart class="lg:col-span-2">
-    </app-visit-chart>
-    <!--  -->
-    <app-department-chart>
-    </app-department-chart>
-  </section>
-
-  <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-    <div class="lg:col-span-8 glass-card rounded-2xl light-leak-shadow overflow-hidden">
-      <div class="p-6 flex justify-between items-center border-b border-outline-variant/10">
-        <h3 class="text-headline-md font-bold text-on-surface">Lịch hẹn hôm nay</h3>
-        <div class="flex gap-2">
-          <div class="relative" (clickOutside)="isFilterOpen = false">
-            <button (click)="isFilterOpen = !isFilterOpen"
-              class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
-              <span class="material-symbols-outlined text-on-surface-variant" data-icon="filter_list">filter_list</span>
-            </button>
-            <div *ngIf="isFilterOpen"
-              class="absolute right-0 mt-2 w-48 bg-surface border border-outline-variant/20 rounded-xl shadow-xl z-50 overflow-hidden origin-top-right">
-              <div
-                class="px-4 py-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest bg-surface-container-low/50 border-b border-outline-variant/10">
-                Lọc theo trạng thái
-              </div>
-              <div class="py-1 flex flex-col">
-                <button (click)="onStatusFilter('All')"
-                  class="w-full text-left px-4 py-2 text-sm font-body text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">
-                  Tất cả lịch hẹn
-                </button>
-                <button (click)="onStatusFilter('Confirmed')"
-                  class="w-full text-left px-4 py-2 text-sm font-body text-on-surface hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-green-500"></span> Đã xác nhận
-                </button>
-                <button (click)="onStatusFilter('Scheduled')"
-                  class="w-full text-left px-4 py-2 text-sm font-body text-on-surface hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-yellow-500"></span> Đã lên lịch
-                </button>
-                <button (click)="onStatusFilter('Cancelled')"
-                  class="w-full text-left px-4 py-2 text-sm font-body text-on-surface hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-red-500"></span> Đã hủy
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
-            <span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
-          </button>
-        </div>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead>
-            <tr
-              class="bg-surface-container-low text-on-surface-variant font-label-md uppercase tracking-wider text-[11px]">
-              <th class="px-6 py-4">Bệnh nhân</th>
-              <th class="px-6 py-4">Bác sĩ</th>
-              <th class="px-6 py-4">Thời gian</th>
-              <th class="px-6 py-4">Trạng thái</th>
-              <th class="px-6 py-4 text-right">Hành động</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-outline-variant/10">
-            @if (thisAppoitntment().length > 0) {
-            <tr *ngFor="let item of thisAppoitntment()" class="hover:bg-surface-container-low/50 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div
-                    class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                    {{ item.initials }}
-                  </div>
-                  <div>
-                    <p class="font-bold text-on-surface">{{ item.name }}</p>
-                    <p class="text-on-surface-variant text-xs">Mã: #{{ item.id }}</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 font-body-sm">
-                <div class="flex items-center gap-2">
-                  <div class="w-2 h-2 rounded-full" [ngClass]="item.tone"></div>
-                  <span>{{ item.doctor }}</span>
-                </div>
-                <p class="text-[10px] text-on-surface-variant">{{ item.department }}</p>
-              </td>
-              <td class="px-6 py-4 font-body-sm">{{ item.time }}</td>
-              <td class="px-6 py-4">
-                <span class="px-3 py-1 text-[11px] font-bold rounded-full uppercase tracking-tighter"
-                  [ngClass]="getStatusConfig(item.status).badge">
-                  {{ getStatusConfig(item.status).label }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-right">
-                <button class="text-primary hover:underline text-xs font-bold" (click)="getAppointmentById(item.id)">
-                  Chi tiết
-                </button>
-              </td>
-            </tr>
-            } @else {
-            <tr>
-              <td colspan="5" class="px-8 py-20 text-center">
-                <div class="flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
-                  <div
-                    class="w-16 h-16 rounded-2xl bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-4 shadow-inner">
-                    <span class="material-symbols-outlined text-3xl"
-                      style="font-variation-settings: &quot;FILL&quot; 1">event_busy</span>
-                  </div>
-                  <h5 class="font-headline text-base font-bold text-on-surface">Không có lịch hẹn</h5>
-                  <p class="text-xs text-on-surface-variant mt-1.5 max-w-xs mx-auto leading-relaxed">
-                    Hiện không có lịch hẹn phù hợp để hiển thị. Hãy đổi bộ lọc hoặc thêm lịch hẹn mới.
-                  </p>
-                  <button (click)="openForm()"
-                    class="mt-6 px-5 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-headline font-bold text-xs transition-colors flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                    Đặt lịch mới
-                  </button>
-                </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="lg:col-span-4 glass-card rounded-2xl p-6 light-leak-shadow">
-      <h3 class="text-headline-md font-bold text-on-surface mb-6">Hiệu suất bác sĩ</h3>
-      <div class="space-y-6">
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-bold text-on-surface-variant">
-                ES</div>
-              <div>
-                <p class="font-bold text-on-surface text-body-sm">BS. Emily Stone</p>
-                <p class="text-xs text-on-surface-variant">Tim mạch</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-bold text-primary">24 lịch</p>
-              <p class="text-[10px] text-on-surface-variant uppercase font-bold">Tuần này</p>
-            </div>
-          </div>
-          <div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
-            <div class="bg-primary h-full w-[92%]"></div>
-          </div>
-          <p class="text-[10px] mt-1 text-on-surface-variant text-right">Mức tải 92%</p>
-        </div>
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-bold text-on-surface-variant">
-                RB</div>
-              <div>
-                <p class="font-bold text-on-surface text-body-sm">BS. Robert Black</p>
-                <p class="text-xs text-on-surface-variant">Chỉnh hình</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-bold text-primary">19 lịch</p>
-              <p class="text-[10px] text-on-surface-variant uppercase font-bold">Tuần này</p>
-            </div>
-          </div>
-          <div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
-            <div class="bg-secondary h-full w-[78%]"></div>
-          </div>
-          <p class="text-[10px] mt-1 text-on-surface-variant text-right">Mức tải 78%</p>
-        </div>
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center font-bold text-on-surface-variant">
-                LC</div>
-              <div>
-                <p class="font-bold text-on-surface text-body-sm">BS. Lisa Chang</p>
-                <p class="text-xs text-on-surface-variant">Nhi</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-bold text-primary">15 lịch</p>
-              <p class="text-[10px] text-on-surface-variant uppercase font-bold">Tuần này</p>
-            </div>
-          </div>
-          <div class="w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
-            <div class="bg-tertiary h-full w-[65%]"></div>
-          </div>
-          <p class="text-[10px] mt-1 text-on-surface-variant text-right">Mức tải 65%</p>
-        </div>
-      </div>
-      <button
-        class="w-full mt-8 py-3 border border-outline-variant rounded-xl text-label-md font-bold text-on-surface hover:bg-surface-container-low transition-colors">
-        Báo cáo đầy đủ
-      </button>
-    </div>
-  </section>
-
-  <section class="glass-card rounded-2xl p-8 light-leak-shadow">
-    <app-revenue-chart></app-revenue-chart>
-  </section>
-
-  <app-drawer-appointment *ngIf="isDrawerOpen" [appointment]="selectedAppointment" (closeDrawer)="closeDrawer()"
-    (appointmentUpdated)="onRefreshData($event)">
-  </app-drawer-appointment>
-
-  @if (isFormOpen()) {
-  <app-appointment-create (close)="closeForm()">
-  </app-appointment-create>/>
-  }
-</div>
+    <p class="text-on-surface-variant font-label-md uppercase tracking-wider mb-1">{{ stat.title }}</p>
+    <h3 class="text-headline-md font-bold text-on-surface">{{ stat.value }}</h3>
+    <p class="text-[11px] text-on-surface-variant mt-2">{{ stat.note }}</p>
+  </div>
+</section>

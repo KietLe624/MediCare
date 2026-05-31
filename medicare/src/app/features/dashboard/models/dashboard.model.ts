@@ -52,3 +52,11 @@ export interface RevenueByMonth {
   month: string;
   revenue: number;
 }
+
+export interface DoctorAppointmentByDate {
+  doctorId: number;
+  doctorName: string;
+  departmentName: string;
+  appointmentCount: number;
+  workloadPercent: number;
+}

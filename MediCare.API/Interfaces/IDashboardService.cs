@@ -4,7 +4,7 @@ using static MediCare.API.DTOs.UserDTO;
 namespace MediCare.API.Interfaces
 {
     public interface IDashboardService
-    {
+    {   
         Task<DashboardOverviewResponse> GetOverviewAsync();
         Task<List<AppointmentTodayResponse>> GetAppointmentsTodayAsync();
         Task<List<PatientsByDepartmentResponse>> GetPatientsByDepartmentAsync();
@@ -14,5 +14,6 @@ namespace MediCare.API.Interfaces
 
         // Doctor
         Task<DoctorDashboardResponse> GetDoctorDashboardAsync(long doctorId);
+        Task<List<DoctorAppointmentStatsResponse>> GetDoctorAppointmentsByDateAsync(int days);
     }
 }

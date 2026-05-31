@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AppointmentToday, OverviewResponse, PatientsByDepartment, RevenueByDate, VisitByDate } from '../models/dashboard.model';
+import { AppointmentToday, DoctorAppointmentByDate, OverviewResponse, PatientsByDepartment, RevenueByDate, RevenueByMonth, VisitByDate } from '../models/dashboard.model';
 
 @Injectable({
   providedIn: 'root',
@@ -57,4 +57,23 @@ export class DashboardService {
       throw error;
     }
   }
+
+  getRevenueByMonth(months: number = 30): Observable<RevenueByMonth[]> {
+    try {
+      return this.http.get<RevenueByMonth[]>(`${this.dashboardUrl}/revenue/by-month?months=${months}`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu doanh thu theo tháng:', error);
+      throw error;
+    }
+  }
+
+  getDoctorAppointments(days: number = 7): Observable<DoctorAppointmentByDate[]> {
+    try {
+      return this.http.get<DoctorAppointmentByDate[]>(`${this.dashboardUrl}/doctor/appointments/by-date?days=${days}`);
+    } catch (error) {
+      console.error('Không lấy được dữ liệu cuộc hẹn theo bác sĩ:', error);
+      throw error;
+    }
+  }
+
 }

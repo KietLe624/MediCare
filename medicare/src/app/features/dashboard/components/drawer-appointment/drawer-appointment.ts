@@ -23,7 +23,7 @@ import { ToastService } from '../../../../core/shared/services/toast-info';
   templateUrl: './drawer-appointment.html',
   styleUrl: './drawer-appointment.scss',
 })
-export class DrawerAppointment implements OnInit, OnDestroy {
+export class DrawerAppointmentComponent implements OnInit, OnDestroy {
   private document = inject(DOCUMENT);
   private renderer = inject(Renderer2);
   private toast = inject(ToastService);

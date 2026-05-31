@@ -4,8 +4,8 @@ import { ForgotPassword } from './features/auth/components/forgot-password/forgo
 import { roleGuard } from './core/guards/roleGuard/role-guard';
 import { noAuthGuard } from './core/guards/noAuthGuard/no-auth-guard';
 import { authGuard } from './core/guards/authGuard/auth-guard';
-import { OverviewComponent } from './features/dashboard/components/overview/overview';
 import { AdminLayout } from './core/layouts/pages/admin-layout/admin-layout';
+import { OverviewPageComponent } from './features/dashboard/pages/overview-page/overview-page';
 
 export const routes: Routes = [
   {
@@ -37,7 +37,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'overview',
-        component: OverviewComponent,
+        component: OverviewPageComponent,
       },
       {
         path: '',

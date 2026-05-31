@@ -16,7 +16,6 @@ namespace MediCare.API.Services
             _logger = logger;
         }
 
-
         // OVERVIEW
         public async Task<DashboardOverviewResponse> GetOverviewAsync()
         {
@@ -158,7 +157,7 @@ namespace MediCare.API.Services
             days = days <= 7 ? 7 : 30;
 
             // Tính khoảng thời gian từ ngày hiện tại trở về trước
-            var fromDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-days + 1)); 
+            var fromDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-days + 1));
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
             // Lấy số lượt khám theo ngày từ DB
@@ -244,7 +243,6 @@ namespace MediCare.API.Services
         }
 
         // DOCTOR DASHBOARD
-
         public async Task<DoctorDashboardResponse> GetDoctorDashboardAsync(long doctorId)
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -308,7 +306,37 @@ namespace MediCare.API.Services
                 UpcomingToday = upcoming
             };
         }
-    }
 
+        // DOCTOR APPOINTMENTS BY DATE
+        public async Task<List<DoctorAppointmentStatsResponse>> GetDoctorAppointmentsByDateAsync(int days)
+        {
+            days = days <= 7 ? 7 : 30;
+            var fromDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-days + 1));
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            var result = await _context.Appointments
+            .AsNoTracking()
+            .Where(a =>
+                a.AppointmentDate >= fromDate &&
+                a.AppointmentDate <= today)
+            .GroupBy(a => new
+            {
+                a.DoctorId,
+                DoctorName = a.Doctor.User.FullName,
+                DepartmentName = a.Doctor.Department.Name
+            })
+            .Select(g => new DoctorAppointmentStatsResponse
+            {
+                DoctorId = g.Key.DoctorId,
+                DoctorName = g.Key.DoctorName,
+                DepartmentName = g.Key.DepartmentName,
+                AppointmentCount = g.Count()
+            })
+            .OrderByDescending(x => x.AppointmentCount)
+            .ToListAsync();
+            return result;
+        }
+
+    }
 
 }

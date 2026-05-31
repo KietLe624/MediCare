@@ -127,7 +127,7 @@ namespace MediCare.API.DTOs
         public long Id { get; set; }
         public string UHID { get; set; } = default!;
         public string FullName { get; set; } = default!;
-        public string? PhoneNumber { get; set; }    
+        public string? PhoneNumber { get; set; }
     }
     public class PatientResponse
     {
@@ -179,7 +179,7 @@ namespace MediCare.API.DTOs
         public DateTime CreatedAt { get; internal set; }
         public DoctorBriefResponse Doctor { get; internal set; }
         public DepartmentBriefResponse Department { get; internal set; }
-    } 
+    }
     public class PatientVisitResponse
     {
         public long Id { get; set; }
@@ -234,14 +234,15 @@ namespace MediCare.API.DTOs
     public class DoctorBriefResponse
     {
         public long Id { get; set; }
-        public string FullName { get; set; } = default!;
+        public string? FullName { get; set; } = default!;
         public string? Specialization { get; set; }
         public decimal? ConsultationFee { get; set; }
-        public bool IsAvailable { get; set; }    }
+        public bool IsAvailable { get; set; }
+    }
     public class DepartmentBriefResponse
     {
         public long Id { get; set; }
-        public string Name { get; set; } = default!;
+        public string? Name { get; set; } = default!;
     }
     public class MedicationBriefResponse
     {

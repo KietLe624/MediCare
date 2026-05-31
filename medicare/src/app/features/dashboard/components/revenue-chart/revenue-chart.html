@@ -1,42 +1,49 @@
-<div class="glass-card rounded-2xl p-8">
+<div class="glass-card rounded-2xl p-8 light-leak-shadow flex flex-col h-full bg-white">
 
-  <div class="flex justify-between items-center mb-6">
-
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
     <div>
-      <h3 class="text-xl font-bold">
-        Doanh thu
-      </h3>
-
-      <p class="text-sm text-slate-500">
-        Phân tích doanh thu theo thời gian
-      </p>
+      <h3 class="text-headline-md font-bold text-slate-900 mb-1">Doanh thu</h3>
+      <p class="text-sm text-slate-500 font-medium">Phân tích doanh thu theo thời gian</p>
     </div>
 
-    <div class="flex bg-slate-100 p-1 rounded-lg">
+    <div class="flex items-center gap-3">
 
-      <button (click)="changeRange(7)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 7">
+      <div class="flex bg-slate-100 p-1 rounded-lg">
+        <button (click)="changeMode('7d')" class="px-4 py-1.5 text-sm rounded-md transition-all duration-200"
+          [ngClass]="selectedMode === '7d' ? 'bg-white text-primary font-bold shadow-sm' : 'text-slate-500 hover:text-slate-700 font-medium'">
+          7 Ngày
+        </button>
 
-        7d
-      </button>
+        <button (click)="changeMode('30d')" class="px-4 py-1.5 text-sm rounded-md transition-all duration-200"
+          [ngClass]="selectedMode === '30d' ? 'bg-white text-primary font-bold shadow-sm' : 'text-slate-500 hover:text-slate-700 font-medium'">
+          30 Ngày
+        </button>
 
-      <button (click)="changeRange(30)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 30">
+        <button (click)="changeMode('year')" class="px-4 py-1.5 text-sm rounded-md transition-all duration-200"
+          [ngClass]="selectedMode === 'year' ? 'bg-white text-primary font-bold shadow-sm' : 'text-slate-500 hover:text-slate-700 font-medium'">
+          Theo năm
+        </button>
+      </div>
 
-        30d
-      </button>
-
-      <button (click)="changeRange(365)" class="px-4 py-1 rounded-md" [class.bg-white]="selectedRange === 365">
-
-        12m
-      </button>
-
+      @if (selectedMode === 'year') {
+      <div class="animate-in fade-in slide-in-from-right-4 duration-300">
+        <select [ngModel]="selectedYear" (ngModelChange)="changeYear($event)"
+          class="appearance-none bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary block px-4 py-1.5 pr-8 outline-none shadow-sm cursor-pointer transition-all bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-no-repeat bg-[position:right_12px_center]">
+          <option [value]="2024">Năm 2024</option>
+          <option [value]="2025">Năm 2025</option>
+          <option [value]="2026">Năm 2026</option>
+        </select>
+      </div>
+      }
     </div>
-
   </div>
 
-  <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
-    [yaxis]="chartOptions.yaxis!" [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
-    [dataLabels]="chartOptions.dataLabels!" [grid]="chartOptions.grid!" [fill]="chartOptions.fill!"
-    [colors]="chartOptions.colors!">
-  </apx-chart>
+  <div class="relative w-full flex-1 min-h-[320px]">
+    <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+      [yaxis]="chartOptions.yaxis!" [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
+      [dataLabels]="chartOptions.dataLabels!" [grid]="chartOptions.grid!" [fill]="chartOptions.fill!"
+      [colors]="chartOptions.colors!">
+    </apx-chart>
+  </div>
 
 </div>
