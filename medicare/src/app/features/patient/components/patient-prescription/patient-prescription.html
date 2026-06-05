@@ -1,0 +1,113 @@
+<div class="space-y-6">
+
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h2 class="text-xl font-bold text-slate-800">Đơn thuốc đã kê</h2>
+      <p class="text-xs font-medium text-slate-500 mt-1">Lịch sử chỉ định và hướng dẫn sử dụng thuốc</p>
+    </div>
+    <button
+      class="text-sm font-bold text-white flex items-center gap-2 bg-blue-600 px-5 py-2.5 rounded-xl hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/20 transition-all active:scale-95">
+      <span class="material-symbols-outlined text-[18px]">print</span> In đơn thuốc
+    </button>
+  </div>
+
+  <div class="pt-4">
+    <div class="space-y-0">
+
+      @for (item of prescriptions; track item.id) {
+      <div class="relative pl-14 sm:pl-16 pb-8 last:pb-0 group">
+
+        <div
+          class="absolute left-[19px] top-10 bottom-0 w-[2px] bg-slate-100 group-last:hidden group-hover:bg-blue-200 transition-colors duration-300">
+        </div>
+
+        <div
+          class="absolute left-0 top-0 w-10 h-10 rounded-full ring-4 ring-white bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm z-10 transition-transform duration-300 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
+          <span class="material-symbols-outlined text-[20px]">medication</span>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl border border-slate-100 p-5 sm:p-6 shadow-sm hover:shadow-[0_8px_30px_rgb(0,87,205,0.06)] hover:border-blue-200 transition-all duration-300">
+
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3">
+              <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">
+                {{ item.prescriptionDate | date: 'dd MMM, yyyy' }}
+              </span>
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+              <span
+                class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-2 py-1 rounded-md flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">assignment</span>
+                Khám ngày {{ item.visitDate | date: 'dd/MM' }}
+              </span>
+            </div>
+
+            <span
+              class="text-xs font-bold text-slate-600 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg flex items-center gap-1">
+              SL: <span class="text-slate-800 text-sm">{{ item.unit }}</span>
+            </span>
+          </div>
+
+          <h3 class="text-lg font-extrabold text-slate-800 mb-4">{{ item.medication }}</h3>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100/50">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Liều lượng</p>
+              <p class="text-sm font-semibold text-slate-700">{{ item.dosage }}</p>
+            </div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100/50">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tần suất</p>
+              <p class="text-sm font-semibold text-slate-700">{{ item.frequency }}</p>
+            </div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100/50 col-span-2 md:col-span-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Kéo dài</p>
+              <p class="text-sm font-semibold text-slate-700">{{ item.duration || 'Theo chỉ định' }}</p>
+            </div>
+          </div>
+
+          <div class="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 flex gap-3 mb-5">
+            <span class="material-symbols-outlined text-[20px] text-blue-500 shrink-0">info</span>
+            <div>
+              <p class="text-[11px] font-bold text-blue-800 uppercase tracking-widest mb-0.5">Hướng dẫn cách dùng</p>
+              <p class="text-sm font-medium text-blue-900/80 leading-relaxed">{{ item.instructions }}</p>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                BS
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kê đơn bởi</p>
+                <p class="text-xs font-bold text-slate-700">{{ item.doctorName || item.doctor.fullName || 'Không rõ' }}
+                </p>
+              </div>
+            </div>
+
+            <button
+              class="text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1">
+              Chi tiết <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+      } @empty {
+      <div class="pl-14 sm:pl-16">
+        <div
+          class="bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center flex flex-col items-center">
+          <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[32px] text-slate-300">prescriptions</span>
+          </div>
+          <p class="text-sm font-bold text-slate-700 mb-1">Chưa có đơn thuốc nào</p>
+          <p class="text-xs font-medium text-slate-500">Bệnh nhân này chưa được kê đơn thuốc nào trong các lượt khám
+            trước đây.</p>
+        </div>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

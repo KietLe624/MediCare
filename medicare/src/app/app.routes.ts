@@ -4,8 +4,15 @@ import { ForgotPassword } from './features/auth/components/forgot-password/forgo
 import { roleGuard } from './core/guards/roleGuard/role-guard';
 import { noAuthGuard } from './core/guards/noAuthGuard/no-auth-guard';
 import { authGuard } from './core/guards/authGuard/auth-guard';
-import { OverviewComponent } from './features/dashboard/components/overview/overview';
+// Dashboard
 import { AdminLayout } from './core/layouts/pages/admin-layout/admin-layout';
+import { OverviewPageComponent } from './features/dashboard/pages/overview-page/overview-page';
+// Patient
+import { PatientPageComponent } from './features/patient/pages/patient-page/patient-page';
+import { PatientDetailComponent } from './features/patient/components/patient-detail/patient-detail';
+import { EditPatientComponent } from './features/patient/components/edit-patient/edit-patient';
+import { CreatePatientComponent } from './features/patient/components/create-patient/create-patient';
+
 
 export const routes: Routes = [
   {
@@ -37,7 +44,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'overview',
-        component: OverviewComponent,
+        component: OverviewPageComponent,
       },
       {
         path: '',
@@ -45,6 +52,22 @@ export const routes: Routes = [
         redirectTo: 'overview',
       },
     ],
+  },
+  {
+    path: 'patients',
+    canActivate: [authGuard, roleGuard],
+    component: AdminLayout,
+    children: [
+      {
+        path: '',
+        component: PatientPageComponent,
+      },
+      {
+        path: ':id/detail',
+        component: PatientDetailComponent,
+      }
+    ]
   }
+
 
 ];

@@ -1,12 +1,23 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from "@angular/forms";
 // apexcharts
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, NgApexchartsModule } from 'ng-apexcharts';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexDataLabels,
+  ApexFill,
+  ApexGrid,
+  ApexStroke,
+  ApexTooltip,
+  ApexXAxis,
+  ApexYAxis,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 // Services
 import { DashboardService } from '../../services/dashboard';
 // Models
-import { RevenueByDate, RevenueByMonth } from '../../models/dashboard.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -21,166 +32,170 @@ export type ChartOptions = {
   colors: string[];
 };
 
+type RevenueMode = '7d' | '30d' | 'year';
+
 @Component({
   selector: 'app-revenue-chart',
-  imports: [NgApexchartsModule, CommonModule],
+  imports: [NgApexchartsModule, CommonModule, FormsModule],
   templateUrl: './revenue-chart.html',
   styleUrl: './revenue-chart.scss',
 })
 export class RevenueChartComponent implements OnInit {
   private dashboardService = inject(DashboardService);
-  private revenueByDate: RevenueByDate[] = []
-  private revenueByMonth: RevenueByMonth[] = []
+  private cdr = inject(ChangeDetectorRef);
+
+  ngOnInit() {
+    this.loadRevenueChart();
+  }
 
   chartOptions: Partial<ChartOptions> = {
     series: [],
-
     chart: {
-      type: 'line',
+      type: 'area',
       height: 320,
       toolbar: {
-        show: false
+        show: false,
       },
       zoom: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
-
     colors: ['#10b981'],
-
     stroke: {
       curve: 'smooth',
-      width: 4
+      width: 4,
     },
-
     fill: {
       type: 'gradient',
       gradient: {
         opacityFrom: 0.25,
-        opacityTo: 0
-      }
+        opacityTo: 0,
+      },
     },
-
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
-
     grid: {
       borderColor: '#e2e8f0',
-      strokeDashArray: 4
+      strokeDashArray: 4,
     },
-
-    tooltip: {
-      enabled: true,
-
-      y: {
-        formatter(value) {
-
-          return new Intl.NumberFormat(
-            'vi-VN',
-            {
-              style: 'currency',
-              currency: 'VND'
-            }
-          ).format(value);
-        }
-      }
-    },
-
-    yaxis: {
-      labels: {
-        formatter(value) {
-
-          return `${(value / 1000).toFixed(0)}k`;
-        }
-      }
-    },
-
     xaxis: {
       categories: [],
-
-      labels: {
-        hideOverlappingLabels: true
-      }
-    }
+    },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter(value) {
+          return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+          }).format(value);
+        },
+      },
+    },
   };
 
-  selectedRange: number = 1;
-  changeRange(range: number) {
-    this.selectedRange = range;
-    this.loadRevenueByDate();
-  }
-  
-  constructor() {
-    this.loadRevenueByDate();
-    // this.loadRevenueByMonth();
+  selectedMode: RevenueMode = '7d';
+  selectedYear = new Date().getFullYear();
+
+  changeMode(mode: RevenueMode) {
+    this.selectedMode = mode;
+    this.loadRevenueChart();
   }
 
-  ngOnInit() {
-    this.loadRevenueByDate();
+  changeYear(year: number) {
+    this.selectedYear = year;
+
+    if (this.selectedMode === 'year') {
+      this.loadRevenueChart();
+    }
   }
 
-  loadRevenueByDate() {
+  loadRevenueChart() {
+    if (this.selectedMode === 'year') {
+      this.dashboardService
+        .getRevenueByMonth(this.selectedYear)
+        .subscribe((res) => {
+          this.chartOptions = {
+            ...this.chartOptions,
+            chart: {
+              ...this.chartOptions.chart,
+              type: 'bar',
+            },
+            stroke: {
+              curve: 'straight',
+              width: 0,
+            },
+            fill: {
+              type: 'solid',
+              opacity: 1,
+              colors: ['#3b82f6']
+            },
 
-    this.dashboardService
-      .getRevenueByDate(this.selectedRange)
-      .subscribe(res => {
-
-        this.chartOptions = {
-
-          ...this.chartOptions,
-
-          series: [
-            {
-              name: 'Doanh thu',
-              data: res.map(x => x.revenue)
-            }
-          ],
-
-          xaxis: {
-            ...this.chartOptions.xaxis,
-
-            categories: res.map(x =>
-              this.formatXAxisLabel(x.date)
-            )
-          }
-        };
-      });
-  }
-
-
-  private formatXAxisLabel(
-    date: string
-  ): string {
-
-    const parsedDate = new Date(date);
-
-    if (this.selectedRange === 1) {
-
-      return new Intl.DateTimeFormat(
-        'vi-VN',
-        {
-          weekday: 'short'
-        }
-      ).format(parsedDate);
+            series: [
+              {
+                name: 'Doanh thu',
+                data: res.map((x) => x.revenue),
+              },
+            ],
+            xaxis: {
+              categories: res.map((x) => `T${x.month}`),
+            },
+          };
+          this.cdr.detectChanges();
+        });
+      return;
     }
 
-    if (this.selectedRange === 30) {
+    const days = this.selectedMode === '7d' ? 7 : 30;
 
-      return new Intl.DateTimeFormat(
-        'vi-VN',
-        {
-          day: '2-digit'
-        }
-      ).format(parsedDate);
-    }
+    this.dashboardService.getRevenueByDate(days).subscribe((res) => {
+      this.chartOptions = {
+        ...this.chartOptions,
+        // loại chart
+        chart: {
+          ...this.chartOptions.chart,
+          type: 'bar',
+        },
+        // loại đường nét
+        stroke: {
+          curve: 'straight',
+          width: 0,
+        },
+        // màu sắc
+        fill: {
+          type: 'solid',
+          opacity: 1,
+          colors: ['#3b82f6']
+        },
+        // dữ liệu
+        series: [
+          {
+            name: 'Doanh thu',
+            data: res.map((x) => x.revenue),
+          },
+        ],
 
-    return new Intl.DateTimeFormat(
-      'vi-VN',
-      {
-        month: 'short'
-      }
-    ).format(parsedDate);
+        xaxis: {
+          categories: res.map((x) => this.formatDateLabel(x.date)),
+        },
+      };
+      this.cdr.detectChanges();
+    });
+
   }
 
+  private formatDateLabel(date: string): string {
+    const d = new Date(date);
+
+    if (this.selectedMode === '7d') {
+      return new Intl.DateTimeFormat('vi-VN', {
+        weekday: 'short',
+      }).format(d);
+    }
+
+    return new Intl.DateTimeFormat('vi-VN', {
+      day: '2-digit',
+    }).format(d);
+  }
 }

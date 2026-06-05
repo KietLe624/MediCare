@@ -1,0 +1,111 @@
+<div class="space-y-6">
+
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h2 class="text-xl font-bold text-slate-800">Lịch sử hóa đơn</h2>
+      <p class="text-xs font-medium text-slate-500 mt-1">Theo dõi tiến trình thanh toán viện phí và dịch vụ y tế</p>
+    </div>
+    <button
+      class="text-sm font-bold text-slate-600 flex items-center gap-2 bg-white border border-slate-200 px-5 py-2.5 rounded-xl hover:bg-slate-50 hover:text-blue-600 transition-colors shadow-sm active:scale-95">
+      <span class="material-symbols-outlined text-[18px]">download</span> Xuất báo cáo
+    </button>
+  </div>
+
+  <div class="pt-2">
+
+    <div
+      class="hidden md:grid grid-cols-12 gap-6 pl-16 pr-6 pb-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+      <div class="col-span-3">Ngày lập</div>
+      <div class="col-span-4">Dịch vụ & Mã hóa đơn</div>
+      <div class="col-span-2">Thanh toán</div>
+      <div class="col-span-3 text-right">Tổng tiền & Trạng thái</div>
+    </div>
+
+    <div class="space-y-0">
+
+      @for (item of invoices; track item.id) {
+      <div class="relative pl-14 sm:pl-16 pb-6 last:pb-0 group">
+
+        <div
+          class="absolute left-[19px] top-10 bottom-0 w-[2px] bg-slate-100 group-last:hidden group-hover:bg-blue-200 transition-colors duration-300">
+        </div>
+
+        <div
+          class="absolute left-0 top-3 w-10 h-10 rounded-full ring-4 ring-white flex items-center justify-center shadow-sm z-10 transition-transform duration-300 group-hover:scale-110"
+          [class.bg-emerald-100]="item.status.toLowerCase() === 'paid'"
+          [class.text-emerald-600]="item.status.toLowerCase() === 'paid'"
+          [class.bg-amber-100]="item.status.toLowerCase() === 'pending'"
+          [class.text-amber-600]="item.status.toLowerCase() === 'pending'"
+          [class.bg-slate-100]="item.status.toLowerCase() !== 'paid' && item.status.toLowerCase() !== 'pending'"
+          [class.text-slate-500]="item.status.toLowerCase() !== 'paid' && item.status.toLowerCase() !== 'pending'">
+
+          <span class="material-symbols-outlined text-[18px] font-bold">
+            {{ item.status.toLowerCase() === 'paid' ? 'check_circle' : (item.status.toLowerCase() === 'pending' ?
+            'schedule' : 'receipt_long') }}
+          </span>
+        </div>
+
+        <div
+          class="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-[0_8px_30px_rgb(0,87,205,0.06)] hover:border-blue-200 transition-all duration-300 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+
+          <div class="md:col-span-3 flex flex-col gap-1">
+            <p class="text-sm font-extrabold text-slate-800 tracking-tight">
+              {{ (item.issuedAt || item.createdAt) | date: 'dd MMM, yyyy' }}
+            </p>
+            <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium mt-0.5">
+              <span class="material-symbols-outlined text-[14px] text-slate-400">event</span>
+              Hóa đơn viện phí
+            </div>
+          </div>
+
+          <div class="md:col-span-4 min-w-0 flex flex-col gap-1.5">
+            <h3 class="text-sm font-extrabold text-slate-800 truncate" [title]="item.notes || 'Khám và điều trị y tế'">
+              {{ item.notes || 'Khám và điều trị y tế tổng quát' }}
+            </h3>
+            <span
+              class="text-[9px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded w-max flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">tag</span> {{ item.invoiceNumber }}
+            </span>
+          </div>
+
+          <div class="md:col-span-2 flex items-center gap-2 min-w-0">
+            <span class="material-symbols-outlined text-[16px] text-slate-400 shrink-0">payments</span>
+            <span class="text-xs font-bold text-slate-700 truncate">
+              {{ getPaymentMethodText(item.paymentMethod) }}
+            </span>
+          </div>
+
+          <div class="md:col-span-3 flex justify-between md:justify-end items-center gap-4">
+            <p class="text-base font-extrabold tracking-tight"
+              [class.text-slate-800]="item.status.toLowerCase() === 'paid'"
+              [class.text-amber-600]="item.status.toLowerCase() === 'pending'"
+              [class.text-red-600]="item.status.toLowerCase() !== 'paid' && item.status.toLowerCase() !== 'pending'">
+              {{ item.totalAmount | number:'1.0-0' }} <span class="text-xs text-slate-400 ml-0.5 font-bold">đ</span>
+            </p>
+
+            <span [class.text-emerald-700]="item.status.toLowerCase() === 'paid'"
+              [class.bg-emerald-50]="item.status.toLowerCase() === 'paid'"
+              [class.text-amber-700]="item.status.toLowerCase() === 'pending'"
+              [class.bg-amber-50]="item.status.toLowerCase() === 'pending'"
+              [class.text-red-700]="item.status.toLowerCase() === 'overdue' || item.status.toLowerCase() === 'cancelled'"
+              [class.bg-red-50]="item.status.toLowerCase() === 'overdue' || item.status.toLowerCase() === 'cancelled'"
+              class="text-[9px] font-bold px-2.5 py-1.5 rounded-md uppercase tracking-wider shrink-0 text-center">
+              {{ getStatusText(item.status) }}
+            </span>
+          </div>
+
+        </div>
+      </div>
+      } @empty {
+      <div class="pl-14 sm:pl-16">
+        <div class="bg-slate-50 rounded-2xl border border-dashed border-slate-200 p-10 text-center">
+          <span class="material-symbols-outlined text-[32px] text-slate-300 mb-3">history_toggle_off</span>
+          <p class="text-sm font-bold text-slate-600">Chưa có lịch sử thanh toán</p>
+          <p class="text-xs text-slate-400 mt-1">Các hóa đơn phát sinh sẽ được hiển thị theo trục thời gian tại đây.</p>
+        </div>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

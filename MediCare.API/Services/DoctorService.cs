@@ -278,7 +278,6 @@ namespace MediCare.API.Services
                 }
             }).ToList();
 
-
             return new PagedResponse<DoctorAppointmentResponse>
             {
                 Data = items,

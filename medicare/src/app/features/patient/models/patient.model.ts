@@ -14,7 +14,7 @@ export interface PatientLookupResponse {
 
 export interface PatientQueryParams {
   search?: string;
-  patientType?: 'Outpatient' | 'Inpatient';
+  patientType?: 'Outpatient' | 'Inpatient' | '';
   bloodType?: string;
   gender?: string;
 
@@ -126,18 +126,13 @@ export interface PatientResponse {
 export interface PatientSummaryResponse {
   id: number;
   uhid: string;
-
   fullName: string;
-
   dateOfBirth: string;
   age: number;
-
   gender: string;
-
   phoneNumber?: string;
 
   bloodType?: string;
-
   patientType: string;
 
   createdAt: string;
@@ -169,8 +164,6 @@ export interface PatientVisitResponse {
   id: number;
 
   visitDate: string;
-
-  doctorName: string;
 
   department: string;
 

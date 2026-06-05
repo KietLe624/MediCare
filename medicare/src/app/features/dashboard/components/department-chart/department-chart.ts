@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {
   ApexChart,
@@ -27,11 +27,11 @@ export type DonutChartOptions = {
   styleUrl: './department-chart.scss',
 })
 
-export class DepartmentChartComponent {
+export class DepartmentChartComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   patientsByDepartment: PatientsByDepartment[] = [];
 
-  constructor() {
+  ngOnInit() {
     this.loadDepartmentChart();
   }
   chartOptions: Partial<DonutChartOptions> = {
@@ -40,9 +40,7 @@ export class DepartmentChartComponent {
       type: 'donut',
       height: 320
     },
-
     labels: [],
-
     colors: [
       '#2563eb',
       '#10b981',
@@ -50,11 +48,9 @@ export class DepartmentChartComponent {
       '#8b5cf6',
       '#ef4444'
     ],
-
     legend: {
       position: 'bottom'
     },
-
     responsive: [
       {
         breakpoint: 480,
@@ -68,17 +64,12 @@ export class DepartmentChartComponent {
   };
 
   loadDepartmentChart() {
-
     this.dashboardService
       .getVisitByDepartment()
       .subscribe(res => {
-        console.log('Patients by department:', res);
         this.chartOptions = {
-
           ...this.chartOptions,
-
           series: res.map(x => x.count),
-
           labels: res.map(x => x.departmentName)
         };
       });

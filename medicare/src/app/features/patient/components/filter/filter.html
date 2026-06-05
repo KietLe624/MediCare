@@ -1,0 +1,84 @@
+<div class="flex items-center gap-3 w-full">
+
+  <div class="relative flex-1 max-w-[500px]">
+    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+      search
+    </span>
+
+    <input type="text" [value]="filters.search" (input)="onSearchInput($event)" (keyup.enter)="applyFilters()"
+      placeholder="Tìm theo tên, mã bệnh nhân hoặc SĐT..."
+      class="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all shadow-sm">
+  </div>
+
+  <div class="flex items-center gap-3 ml-auto">
+    <div class="relative" (clickOutside)="isFilterOpen = false">
+      <button (click)="isFilterOpen = !isFilterOpen"
+        class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors text-slate-700 font-medium focus:ring-2 focus:ring-primary/20 shadow-sm"
+        [class.ring-2]="isFilterOpen" [class.ring-primary]="isFilterOpen">
+        <span class="material-symbols-outlined text-[20px]" [class.text-primary]="isFilterOpen"
+          [class.text-slate-500]="!isFilterOpen">filter_list</span>
+        <span class="hidden sm:inline-block text-sm">Bộ lọc</span>
+      </button>
+
+      @if (isFilterOpen) {
+      <div
+        class="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+
+        <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+          <h4 class="font-bold text-sm text-slate-800">Lọc bệnh nhân</h4>
+        </div>
+
+        <div class="p-4 space-y-5">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2.5">Loại bệnh
+              nhân</label>
+            <select [value]="filters.patientType" (change)="filters.patientType = $any($event.target).value"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none transition-all cursor-pointer hover:border-slate-300 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[position:right_12px_center] bg-no-repeat">
+              <option value="">Tất cả</option>
+              <option value="Outpatient">Ngoại trú (Outpatient)</option>
+              <option value="Inpatient">Nội trú (Inpatient)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2.5">Nhóm máu</label>
+            <select [value]="filters.bloodType" (change)="filters.bloodType = $any($event.target).value"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none transition-all cursor-pointer hover:border-slate-300 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[position:right_12px_center] bg-no-repeat">
+              <option value="">Tất cả</option>
+              <option value="A+">Nhóm A+</option>
+              <option value="A-">Nhóm A-</option>
+              <option value="B+">Nhóm B+</option>
+              <option value="B-">Nhóm B-</option>
+              <option value="AB+">Nhóm AB+</option>
+              <option value="AB-">Nhóm AB-</option>
+              <option value="O+">Nhóm O+</option>
+              <option value="O-">Nhóm O-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+          <button (click)="resetFilters()"
+            class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-colors">
+            Đặt lại
+          </button>
+          <button (click)="applyFilters()"
+            class="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 rounded-lg transition-colors">
+            Áp dụng
+          </button>
+        </div>
+
+      </div>
+      }
+    </div>
+
+    <div class="relative disabled" >
+      <button 
+        class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors text-slate-700 font-medium focus:ring-2 focus:ring-primary/20 shadow-sm">
+        <span class="material-symbols-outlined text-[20px] text-slate-400">sort</span>
+        <span class="hidden sm:inline-block text-sm text-slate-400">Sắp xếp</span>
+      </button>
+    </div>
+  </div>
+
+</div>

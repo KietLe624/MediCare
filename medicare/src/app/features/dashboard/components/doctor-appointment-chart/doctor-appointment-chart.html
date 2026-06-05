@@ -1,0 +1,68 @@
+<h3 class="text-lg font-bold text-on-surface mb-6">
+  Bác sĩ
+</h3>
+
+<div class="space-y-6 flex-1">
+
+  <div *ngFor="let doctor of doctorStats; let i = index" class="group">
+
+    <div class="flex justify-between items-center mb-2.5">
+
+      <div class="flex items-center gap-3">
+
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs" [ngClass]="{
+            'bg-blue-50 text-blue-600': i === 0,
+            'bg-emerald-50 text-emerald-600': i === 1,
+            'bg-amber-50 text-amber-600': i === 2
+          }">
+
+          {{ (doctor.doctorName.charAt(0)) }}
+
+        </div>
+
+        <div>
+
+          <p class="font-bold text-slate-800 text-sm">
+            BS. {{ doctor.doctorName }}
+          </p>
+
+          <p class="text-xs text-slate-500">
+            {{ doctor.departmentName }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="text-right">
+
+        <p class="font-bold text-sm" [ngClass]="{
+            'text-blue-600': i === 0,
+            'text-emerald-600': i === 1,
+            'text-amber-600': i === 2
+          }">
+
+          {{ doctor.appointmentCount }} lịch
+
+        </p>
+
+        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">
+          Tuần này
+        </p>
+      </div>
+    </div>
+    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+      <div class="h-full rounded-full transition-all duration-500" [style.width.%]="doctor.workloadPercent" [ngClass]="{
+          'bg-blue-500 group-hover:bg-blue-600': i === 0,
+          'bg-emerald-500 group-hover:bg-emerald-600': i === 1,
+          'bg-amber-500 group-hover:bg-amber-600': i === 2
+        }">
+      </div>
+    </div>
+  </div>
+</div>
+
+<button disabled
+  class="w-full mt-6 py-3 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200">
+  Báo cáo đầy đủ
+</button>

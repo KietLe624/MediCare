@@ -1,0 +1,166 @@
+<div class="space-y-8 pb-12">
+  <section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8">
+    <div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface">Tổng quan hệ thống</h2>
+      <p class="text-on-surface-variant font-body-md">Chào buổi sáng. Đây là những gì đang diễn ra hôm nay.</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button
+        class="px-4 py-2 bg-white border border-outline-variant rounded-xl font-label-md hover:bg-surface-container-low transition-colors">
+        Tạo báo cáo
+      </button>
+      <button (click)="openForm()"
+        class="px-4 py-2 bg-primary text-white rounded-xl font-label-md active:scale-95 transition-transform flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings: &quot;FILL&quot; 1">add</span>
+        Thao tác nhanh
+      </button>
+    </div>
+  </section>
+  <app-overview></app-overview>
+
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <app-visit-chart
+      class="lg:col-span-2 block bg-white rounded-2xl border border-outline-variant/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300">
+    </app-visit-chart>
+
+    <app-department-chart
+      class="block bg-white rounded-2xl border border-outline-variant/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300">
+    </app-department-chart>
+  </section>
+
+  <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div
+      class="lg:col-span-8 bg-white rounded-2xl border border-outline-variant/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+      <div
+        class="p-6 flex justify-between items-center border-b border-outline-variant/10 bg-surface-container-lowest/50">
+        <h3 class="text-lg font-bold text-on-surface">Lịch hẹn hôm nay</h3>
+        <div class="flex gap-2">
+          <div class="relative" (clickOutside)="isFilterOpen = false">
+            <button (click)="isFilterOpen = !isFilterOpen"
+              class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/20 hover:bg-surface-container-low transition-colors text-on-surface-variant focus:ring-2 focus:ring-primary/20">
+              <span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+            </button>
+
+            <div *ngIf="isFilterOpen"
+              class="absolute right-0 mt-2 w-52 bg-white border border-outline-variant/20 rounded-xl shadow-xl z-50 overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-200">
+              <div
+                class="px-4 py-2.5 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest bg-slate-50 border-b border-outline-variant/10">
+                Lọc theo trạng thái
+              </div>
+              <div class="py-1.5 flex flex-col">
+                <button (click)="onStatusFilter('All')"
+                  class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors">
+                  Tất cả lịch hẹn
+                </button>
+                <button (click)="onStatusFilter('Confirmed')"
+                  class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đã xác nhận
+                </button>
+                <button (click)="onStatusFilter('Scheduled')"
+                  class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span> Đã lên lịch
+                </button>
+                <button (click)="onStatusFilter('Cancelled')"
+                  class="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span> Đã hủy
+                </button>
+              </div>
+            </div>
+          </div>
+          <button
+            class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/20 hover:bg-surface-container-low transition-colors text-on-surface-variant">
+            <span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left">
+          <thead>
+            <tr
+              class="bg-slate-50/50 text-slate-500 font-bold uppercase tracking-wider text-[10px] border-b border-outline-variant/10">
+              <th class="px-6 py-4">Bệnh nhân</th>
+              <th class="px-6 py-4">Bác sĩ</th>
+              <th class="px-6 py-4">Thời gian</th>
+              <th class="px-6 py-4">Trạng thái</th>
+              <th class="px-6 py-4 text-right">Hành động</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant/10">
+            @if (thisAppoitntment().length > 0) {
+            <tr *ngFor="let item of thisAppoitntment()" class="hover:bg-slate-50 transition-colors group">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center font-bold text-blue-600 text-xs">
+                    {{ item.initials }}
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-800 text-sm">{{ item.name }}</p>
+                    <p class="text-slate-500 text-[11px] mt-0.5">Mã: #{{ item.id }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" [ngClass]="item.tone"></div>
+                  <span class="text-sm font-medium text-slate-700">{{ item.doctor }}</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">{{ item.department }}</p>
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-600 font-medium">{{ item.time }}</td>
+              <td class="px-6 py-4">
+                <span class="px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider"
+                  [ngClass]="getStatusConfig(item.status).badge">
+                  {{ getStatusConfig(item.status).label }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-bold transition-colors"
+                  (click)="getAppointmentById(item.id)">
+                  Chi tiết
+                </button>
+              </td>
+            </tr>
+            } @else {
+            <tr>
+              <td colspan="5" class="px-8 py-16 text-center">
+                <div class="flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+                  <div
+                    class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4 shadow-inner">
+                    <span class="material-symbols-outlined text-3xl"
+                      style="font-variation-settings: 'FILL' 1">event_busy</span>
+                  </div>
+                  <h5 class="text-base font-bold text-slate-800">Không có lịch hẹn</h5>
+                  <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto leading-relaxed">
+                    Hiện không có lịch hẹn phù hợp để hiển thị. Hãy đổi bộ lọc hoặc thêm lịch hẹn mới.
+                  </p>
+                  <button (click)="openForm()"
+                    class="mt-5 px-5 py-2.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-xs transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add</span> Đặt lịch mới
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      class="lg:col-span-4 bg-white rounded-2xl p-6 border border-outline-variant/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300 flex flex-col">
+      <app-doctor-appointment-chart></app-doctor-appointment-chart>
+    </div>
+  </section>
+
+  <section
+    class="bg-white rounded-2xl p-8 border border-outline-variant/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300">
+    <app-revenue-chart></app-revenue-chart>
+  </section>
+
+  <app-drawer-appointment *ngIf="isDrawerOpen" [appointment]="selectedAppointment" (closeDrawer)="closeDrawer()"
+    (appointmentUpdated)="onRefreshData($event)">
+  </app-drawer-appointment>
+
+  <app-create-appointment *ngIf="isFormOpen()" (closed)="closeForm()" (saved)="onSubmit()"> </app-create-appointment>
+</div>

@@ -3,36 +3,23 @@ import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 // services
 import { DashboardService } from '../../services/dashboard';
 import { AppointmentService } from '../../../appointment/services/appointment';
-import { DoctorService } from '../../../doctor/services/doctor';
 // Models
-import { AppointmentToday, OverviewResponse } from '../../models/dashboard.model';
-import { AppointmentResponse } from '../../../appointment/models/appointment.model';
-import { DoctorAppointmentResponse } from '../../../doctor/models/doctor.model';
-import { ClickOutside } from '../../../../core/shared/directives/click-outside';
-// Component
-import { DrawerAppointment } from '../drawer-appointment/drawer-appointment';
-import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
-import { VisitChartComponent } from '../visit-chart/visit-chart';
-import { DepartmentChartComponent } from '../department-chart/department-chart';
-import { RevenueChartComponent } from '../revenue-chart/revenue-chart';
+import { OverviewResponse, AppointmentToday } from '../../models/dashboard.model';
 // Helper
 import { AppointmentStatusHelper, StatusConfig } from '../../../../core/shared/helper/appointment-status.hepler';
 // Chart
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexStroke, ApexTooltip, ApexXAxis, ChartComponent } from 'ng-apexcharts';
-import { AdminLayout } from "../../../../core/layouts/pages/admin-layout/admin-layout";
 
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, ClickOutside, DrawerAppointment, AppointmentCreate, VisitChartComponent, DepartmentChartComponent, RevenueChartComponent, NgApexchartsModule],
+  imports: [CommonModule, NgApexchartsModule],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
 })
 export class OverviewComponent {
   // SERVICES
   private dashboardService = inject(DashboardService);
-  private appointmentService = inject(AppointmentService);
   // OTHERS
   private changeDetector = inject(ChangeDetectorRef);
 
@@ -63,25 +50,6 @@ export class OverviewComponent {
     });
   }
 
-  // Appointment drawer
-  isDrawerOpen = false;
-  selectedAppointment: AppointmentResponse | null = null;
-
-  // sidebar view detail appointment
-  getAppointmentById(id: number) {
-    console.log('Lấy thông tin cuộc hẹn với ID:', id);
-    this.appointmentService.getAppointmentById(id).subscribe({
-      next: (data) => {
-        console.log('Thông tin cuộc hẹn:', data);
-        this.selectedAppointment = data as AppointmentResponse;
-        this.isDrawerOpen = true;
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        console.error('Lỗi không lấy được thông tin cuộc hẹn:', error);
-      },
-    });
-  }
 
   // filter
   thisAppoitntment = signal<any[]>([]);
@@ -101,24 +69,6 @@ export class OverviewComponent {
     );
   }
 
-  onStatusFilter(status: string) {
-    this.fillerAppointmentByStatus(status);
-    // this.currentPage = 1;
-    this.changeDetector.markForCheck();
-  }
-
-  closeDrawer() {
-    this.isDrawerOpen = false;
-    this.selectedAppointment = null;
-  }
-
-  onRefreshData(updatedAppointment: AppointmentResponse) {
-    const index = this.appointments.findIndex(item => item.id === updatedAppointment.id);
-    if (index !== -1) {
-      this.appointments[index] = updatedAppointment;
-      this.appointments = [...this.appointments];
-    }
-  }
 
   private buildStats(data: OverviewResponse) {
     return [
@@ -159,8 +109,6 @@ export class OverviewComponent {
   }
 
   // Charts
-
-
 
   // OPEN APPOINTMENT FORM
   isFormOpen = signal(false);
@@ -237,9 +185,9 @@ export class OverviewComponent {
     }
     return 'badge-neutral';
   }
-
   // helper: badge status
   getStatusConfig(status: string): StatusConfig {
     return AppointmentStatusHelper.getConfig(status);
   }
+
 }

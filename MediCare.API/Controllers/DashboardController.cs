@@ -99,6 +99,17 @@ namespace MediCare.API.Controllers
             var result = await _dashboardService.GetDoctorDashboardAsync(doctor.Id);
             return Ok(result);
         }
+
+        [HttpGet("doctor/appointments/by-date")]
+        [Authorize(Roles = "Admin, Doctor, Receptionist")]
+        public async Task<IActionResult> GetDoctorAppointmentsByDate([FromQuery] int days = 7)
+        {
+            var currentUserId = GetCurrentUserId();
+            var result = await _dashboardService.GetDoctorAppointmentsByDateAsync(days);
+            return Ok(result);
+        }
+
+
         // HELPER
         private long GetCurrentUserId()
         {
@@ -110,5 +121,6 @@ namespace MediCare.API.Controllers
 
             return userId;
         }
+
     }
 }
