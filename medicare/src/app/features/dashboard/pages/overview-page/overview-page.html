@@ -162,7 +162,5 @@
     (appointmentUpdated)="onRefreshData($event)">
   </app-drawer-appointment>
 
-  @if (isFormOpen()) {
-  <app-appointment-create (close)="closeForm()"></app-appointment-create>
-  }
+  <app-create-appointment *ngIf="isFormOpen()" (closed)="closeForm()" (saved)="onSubmit()"> </app-create-appointment>
 </div>

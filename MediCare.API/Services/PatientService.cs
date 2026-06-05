@@ -251,6 +251,7 @@ namespace MediCare.API.Services
             {
                 Id = v.Id,
                 VisitDate = v.VisitDate,
+                Department = v.Appointment.Doctor.Department.Name,
                 Symptoms = v.Symptoms,
                 Diagnosis = v.Diagnosis,
                 Treatment = v.Treatment,

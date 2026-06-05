@@ -11,7 +11,6 @@ import { DoctorAppointmentResponse } from '../../../doctor/models/doctor.model';
 import { ClickOutside } from '../../../../core/shared/directives/click-outside';
 // Component
 import { DrawerAppointmentComponent } from '../../components/drawer-appointment/drawer-appointment';
-import { AppointmentCreate } from '../../../appointment/components/appointment-create/appointment-create';
 // Helper
 import { AppointmentStatusHelper, StatusConfig } from '../../../../core/shared/helper/appointment-status.hepler';
 // Chart
@@ -20,11 +19,12 @@ import { DepartmentChartComponent } from '../../components/department-chart/depa
 import { RevenueChartComponent } from '../../components/revenue-chart/revenue-chart';
 import { OverviewComponent } from '../../components/overview/overview';
 import { DoctorAppointmentChart } from "../../components/doctor-appointment-chart/doctor-appointment-chart";
+import { CreateAppointmentComponent } from "../../../appointment/components/create-appointment/create-appointment";
 
 
 @Component({
   selector: 'app-overview-page',
-  imports: [CommonModule, OverviewComponent, VisitChartComponent, DepartmentChartComponent, RevenueChartComponent, DrawerAppointmentComponent, AppointmentCreate, ClickOutside, DoctorAppointmentChart],
+  imports: [CommonModule, OverviewComponent, VisitChartComponent, DepartmentChartComponent, RevenueChartComponent, DrawerAppointmentComponent, ClickOutside, DoctorAppointmentChart, CreateAppointmentComponent],
   templateUrl: './overview-page.html',
   styleUrl: './overview-page.scss',
 })
@@ -114,10 +114,12 @@ export class OverviewPageComponent {
   // OPEN APPOINTMENT FORM
   isFormOpen = signal(false);
 
+  onSubmit() {
+
+  }
   openForm() {
     this.isFormOpen.set(true);
   }
-
   closeForm() {
     this.isFormOpen.set(false);
   }

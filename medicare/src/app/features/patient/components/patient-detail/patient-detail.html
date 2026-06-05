@@ -1,0 +1,374 @@
+@if (patientData) {
+  <div class="p-8 space-y-8">
+    <div
+      class="bg-white rounded-3xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col"
+    >
+      <div
+        class="p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-start lg:items-center relative"
+      >
+        <button
+          class="absolute top-6 right-6 lg:top-8 lg:right-8 w-10 h-10 rounded-full bg-slate-50 hover:bg-blue-50 text-slate-400 hover:text-blue-600 flex items-center justify-center transition-colors"
+        >
+          <span class="material-symbols-outlined text-[20px]">edit</span>
+        </button>
+
+        <div class="relative shrink-0">
+          <img
+            alt="Patient Avatar"
+            class="w-24 h-24 lg:w-28 lg:h-28 rounded-[24px] object-cover border-2 border-slate-50 shadow-sm"
+            [src]="
+              patientData.gender === 'Female'
+                ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuAdErO6KKEW-AWPfqOCrNDxRHQw39l7jq_SSHCKcYNnqSxXigaxEM5st_enIyp1AcszHULDavmjII-cXdbEo5vLjYBFkWAADxQ2BXHONB8glDEX-GKW1eNFsmawOx2kZcaKWxUDwl0ldjepiCfZqNC_k4Yyt3Wzf4wkrCdyqk2bCDSm8RN9lJPOsQpG7ijisezWdEBYRNDwnfA2MsbpDaSdlXQafph59O1ttiDryd0M5NMcMYifY4YCj2mUMTUYKxEMEGQ1nejlhQ'
+                : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDoeQwHFIhYjX6Y_6pQoD7iifCjBre6RzEQMJoQg1B1UQ0Rdw0cSY2rGuVL_5WRBX6WMBgqPFMyXQXyPSYxEo17JFjf7MM9p4GQAPYV5OgSglSu88YYAbs6OaHwWBJq2brmanm05TisSBZj-TwnH7fayHTOWZu2Bx4at9pTgovzWviO4-w0mvvJLezBsp4hI3dWtoQYn-VH2LQ_m0By-j8xzRaN_G3W91eim7j8oZq06GR6oG-XH-NP_MvVSpNgisLjqofT0Y3ERg'
+            "
+          />
+          <div
+            class="absolute -bottom-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl uppercase tracking-wider border-2 border-white shadow-sm"
+          >
+            {{ patientData.patientType || "Ngoại trú" }}
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-0 pr-12 lg:pr-0">
+          <div class="flex flex-wrap items-center gap-3 mb-2">
+            <h1
+              class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight truncate"
+            >
+              {{ patientData.fullName }}
+            </h1>
+            <span
+              class="flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-lg uppercase tracking-widest"
+            >
+              <span class="material-symbols-outlined text-[14px]">tag</span>
+              {{ patientData.uhid }}
+            </span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 lg:gap-6 mt-5">
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0"
+              >
+                <span class="material-symbols-outlined text-[16px]">cake</span>
+              </div>
+              <div>
+                <p
+                  class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+                >
+                  Tuổi
+                </p>
+                <p class="text-sm font-bold text-slate-700">
+                  {{ patientData.age }} Tuổi
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden lg:block w-px h-8 bg-slate-100"></div>
+
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0"
+              >
+                <span class="material-symbols-outlined text-[16px]">
+                  {{ patientData.gender === "Female" ? "female" : "male" }}
+                </span>
+              </div>
+              <div>
+                <p
+                  class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+                >
+                  Giới tính
+                </p>
+                <p class="text-sm font-bold text-slate-700">
+                  {{ patientData.gender === "Female" ? "Nữ" : "Nam" }}
+                </p>
+              </div>
+            </div>
+
+            <div class="hidden lg:block w-px h-8 bg-slate-100"></div>
+
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-500 shrink-0"
+              >
+                <span class="material-symbols-outlined text-[16px]"
+                  >water_drop</span
+                >
+              </div>
+              <div>
+                <p
+                  class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+                >
+                  Nhóm máu
+                </p>
+                <p class="text-sm font-bold text-red-600">
+                  {{ patientData.bloodType || "Chưa rõ" }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-50/50 border-t border-slate-100 p-6 lg:p-8">
+        <h3
+          class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-[16px]"
+            >contact_page</span
+          >
+          Thông Tin Liên Hệ
+        </h3>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
+        >
+          <div
+            class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-3 hover:border-blue-200 transition-colors group"
+          >
+            <div
+              class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-[18px]">call</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p
+                class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+              >
+                Điện thoại
+              </p>
+              <p class="text-sm font-bold text-slate-700 truncate">
+                {{ patientData.phoneNumber || "Chưa cập nhật" }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-3 hover:border-blue-200 transition-colors group"
+          >
+            <div
+              class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-[18px]">mail</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p
+                class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+              >
+                Email
+              </p>
+              <p
+                class="text-sm font-bold text-slate-700 truncate"
+                [title]="patientData.email || 'Chưa cập nhật'"
+              >
+                {{ patientData.email || "Chưa cập nhật" }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-3 hover:border-blue-200 transition-colors group"
+          >
+            <div
+              class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-[18px]">home</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p
+                class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5"
+              >
+                Địa chỉ
+              </p>
+              <p
+                class="text-sm font-bold text-slate-700 line-clamp-2 leading-snug"
+              >
+                {{ patientData.address || "Chưa cập nhật" }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="bg-red-50/30 p-4 rounded-2xl border border-red-100 shadow-sm flex items-start gap-3 hover:border-red-200 transition-colors group"
+          >
+            <div
+              class="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0 group-hover:bg-red-500 group-hover:text-white transition-colors"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >emergency</span
+              >
+            </div>
+            <div class="min-w-0 flex-1">
+              <p
+                class="text-[9px] font-bold text-red-400 uppercase tracking-widest mb-0.5"
+              >
+                Liên hệ khẩn cấp
+              </p>
+              <p class="text-sm font-bold text-slate-800 truncate">
+                {{ patientData.emergencyContactName || "Chưa cấu hình" }}
+              </p>
+              @if (patientData.emergencyContactPhone) {
+                <p class="text-[11px] font-bold text-red-600 mt-0.5 truncate">
+                  {{ patientData.emergencyContactPhone }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav
+      class="flex border-b border-slate-200 gap-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+    >
+      <button
+        (click)="switchTab('visits')"
+        [class.text-blue-600]="activeTab === 'visits'"
+        [class.border-blue-600]="activeTab === 'visits'"
+        [class.text-slate-500]="activeTab !== 'visits'"
+        [class.border-transparent]="activeTab !== 'visits'"
+        class="pb-4 px-2 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap hover:text-blue-600"
+      >
+        <span class="material-symbols-outlined text-[18px]">history</span>
+        Lịch sử khám bệnh
+      </button>
+      <button
+        (click)="switchTab('invoices')"
+        [class.text-blue-600]="activeTab === 'invoices'"
+        [class.border-blue-600]="activeTab === 'invoices'"
+        [class.text-slate-500]="activeTab !== 'invoices'"
+        [class.border-transparent]="activeTab !== 'invoices'"
+        class="pb-4 px-2 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap hover:text-blue-600"
+      >
+        <span class="material-symbols-outlined text-[18px]">receipt</span>
+        Hóa đơn thanh toán
+      </button>
+      <button
+        (click)="switchTab('appointments')"
+        [class.text-blue-600]="activeTab === 'appointments'"
+        [class.border-blue-600]="activeTab === 'appointments'"
+        [class.text-slate-500]="activeTab !== 'appointments'"
+        [class.border-transparent]="activeTab !== 'appointments'"
+        class="pb-4 px-2 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap hover:text-blue-600"
+      >
+        <span class="material-symbols-outlined text-[18px]">event</span>
+        Lịch hẹn khám bệnh
+      </button>
+      <button
+        (click)="switchTab('prescriptions')"
+        [class.text-blue-600]="activeTab === 'prescriptions'"
+        [class.border-blue-600]="activeTab === 'prescriptions'"
+        [class.text-slate-500]="activeTab !== 'prescriptions'"
+        [class.border-transparent]="activeTab !== 'prescriptions'"
+        class="pb-4 px-2 font-bold text-sm border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap hover:text-blue-600"
+      >
+        <span class="material-symbols-outlined text-[18px]"
+          >local_pharmacy
+        </span>
+        Đơn thuốc
+      </button>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- visit  -->
+      <div class="lg:col-span-8 space-y-6">
+        @if (activeTab === "visits") {
+          <app-patient-visit [id]="id"></app-patient-visit>
+        }
+      </div>
+      <!-- end visit -->
+      @if (activeTab === "visits") {
+        <div class="lg:col-span-4 space-y-6">
+          <div class="bg-red-50/50 border border-red-100 rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-5 text-red-600">
+              <span
+                class="material-symbols-outlined text-[20px]"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >warning</span
+              >
+              <h3 class="font-bold text-[11px] uppercase tracking-widest">
+                Dị Ứng & Cảnh Báo
+              </h3>
+            </div>
+            <div class="space-y-3">
+              <div
+                class="p-3.5 bg-white rounded-xl shadow-sm border border-red-50 flex flex-col gap-1"
+              >
+                <span class="text-sm font-bold text-slate-800"
+                  >Tiền sử dị ứng thuốc/khác:</span
+                >
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  {{
+                    patientData.allergies ||
+                      "Không có ghi nhận dị ứng nguy
+            hiểm"
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm"
+          >
+            <h3
+              class="font-bold text-[11px] tracking-widest text-slate-400 mb-5 uppercase"
+            >
+              Bảo Hiểm Y Tế
+            </h3>
+            <div
+              class="flex items-center gap-4 mb-5"
+              *ngIf="patientData.insuranceProvider; else noInsurance"
+            >
+              <div
+                class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center"
+              >
+                <span class="material-symbols-outlined text-blue-600"
+                  >verified_user</span
+                >
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-800">
+                  {{ patientData.insuranceProvider }}
+                </p>
+                <p
+                  class="text-xs text-slate-500 font-medium mt-0.5"
+                  *ngIf="patientData.insuranceNumber"
+                >
+                  Số thẻ: #{{ patientData.insuranceNumber }}
+                </p>
+              </div>
+            </div>
+            <ng-template #noInsurance>
+              <p class="text-xs text-slate-400 italic mb-4">
+                Không tìm thấy thông tin đăng ký bảo hiểm y tế.
+              </p>
+            </ng-template>
+
+            <button
+              class="w-full py-2.5 bg-slate-50 text-slate-600 text-xs font-bold rounded-xl hover:bg-slate-100 hover:text-slate-800 transition-colors"
+            >
+              Xác minh thẻ bảo hiểm
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (activeTab === "invoices") {
+      <div class="lg:col-span-12 space-y-6">
+        <app-patient-invoice [id]="id"></app-patient-invoice>
+      </div>
+    }
+    @if (activeTab === "appointments") {
+      <div class="lg:col-span-12 space-y-6">
+        <app-patient-appointment [id]="id"></app-patient-appointment>
+      </div>
+    }
+    @if (activeTab === "prescriptions") {
+      <div class="lg:col-span-12 space-y-6">
+        <app-patient-prescription [id]="id"></app-patient-prescription>
+      </div>
+    }
+  </div>
+}

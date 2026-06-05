@@ -34,7 +34,7 @@ export class Sidebar {
 
   private authService = inject(AuthService);
 
-    logout(): void {
+  logout(): void {
     this.authService.logout();
   }
 }

@@ -105,7 +105,7 @@ namespace MediCare.API.DTOs
             public string? Diagnosis { get; set; }
             public string? Treatment { get; set; }
             public string? Notes { get; set; }
-            public string Status { get; set; } = default!;
+            public string Status { get; set; } = default!; // InProgress, Completed, Cancelled
             public DateTime CreatedAt { get; set; }
 
             public PatientBriefResponse Patient { get; set; } = default!;

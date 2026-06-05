@@ -184,7 +184,6 @@ namespace MediCare.API.DTOs
     {
         public long Id { get; set; }
         public DateTime VisitDate { get; set; }
-        public string DoctorName { get; set; } = default!;
         public string Department { get; set; } = default!;
         public string Reason { get; set; } = default!;
         public string? Symptoms { get; internal set; }

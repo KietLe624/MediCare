@@ -1,0 +1,161 @@
+<div class="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[999] transition-opacity" (click)="closeDrawer()"></div>
+
+<div
+  class="fixed inset-y-0 right-0 z-[1000] w-full max-w-2xl bg-white shadow-[0_0_40px_rgba(0,0,0,0.1)] flex flex-col animate-[slideInRight_0.3s_ease-out]">
+
+  <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+      </div>
+      <div>
+        <h2 class="text-lg font-extrabold text-slate-800 flex items-center gap-3">
+          Chi tiết ca khám
+          <span class="text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider bg-slate-100 text-slate-500">
+            #{{ visit?.id }}
+          </span>
+        </h2>
+        <p class="text-xs font-medium text-slate-500 mt-0.5 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+          {{ visit?.visitDate | date: 'dd/MM/yyyy - HH:mm' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <span [class.text-emerald-700]="visit?.status?.toLowerCase() === 'completed'"
+        [class.bg-emerald-50]="visit?.status?.toLowerCase() === 'completed'"
+        [class.text-blue-700]="visit?.status?.toLowerCase() === 'scheduled'"
+        [class.bg-blue-50]="visit?.status?.toLowerCase() === 'scheduled'"
+        [class.text-red-700]="visit?.status?.toLowerCase() === 'cancelled'"
+        [class.bg-red-50]="visit?.status?.toLowerCase() === 'cancelled'"
+        class="text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:block">
+        {{ getStatusText(visit?.status || '') }}
+      </span>
+      <button (click)="closeDrawer()"
+        class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-8 space-y-8 bg-slate-50/50">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4">
+        <div class="relative shrink-0">
+          <img class="w-12 h-12 rounded-xl object-cover bg-slate-100"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoeQwHFIhYjX6Y_6pQoD7iifCjBre6RzEQMJoQg1B1UQ0Rdw0cSY2rGuVL_5WRBX6WMBgqPFMyXQXyPSYxEo17JFjf7MM9p4GQAPYV5OgSglSu88YYAbs6OaHwWBJq2brmanm05TisSBZj-TwnH7fayHTOWZu2Bx4at9pTgovzWviO4-w0mvvJLezBsp4hI3dWtoQYn-VH2LQ_m0By-j8xzRaN_G3W91eim7j8oZq06GR6oG-XH-NP_MvVSpNgisLjqofT0Y3ERg"
+            alt="Avatar">
+          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Bệnh nhân</p>
+          <p class="text-sm font-bold text-slate-800 truncate">{{ visit?.patient?.fullName || 'Đang cập nhật' }}</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center gap-4">
+        <div
+          class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center shrink-0">
+          BS
+        </div>
+        <div class="min-w-0">
+          <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Phụ trách chuyên môn</p>
+          <p class="text-sm font-bold text-slate-800 truncate">{{ visit?.doctor?.fullName || 'Chưa phân công' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-widest">Hồ sơ lâm sàng</h3>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[14px]">sick</span> Triệu chứng
+            </p>
+            <p
+              class="text-sm text-slate-700 leading-relaxed font-medium bg-slate-50 p-3 rounded-xl border border-slate-100">
+              {{ visit?.symptoms || 'Không ghi nhận triệu chứng rõ ràng.' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[14px]">biotech</span> Chẩn đoán
+            </p>
+            <p
+              class="text-sm text-slate-700 leading-relaxed font-bold bg-blue-50/50 p-3 rounded-xl border border-blue-100/50">
+              {{ visit?.diagnosis || 'Đang chờ kết quả chẩn đoán.' }}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[14px]">healing</span> Hướng điều trị
+          </p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            {{ visit?.treatment || 'Không có chỉ định điều trị đặc biệt.' }}
+          </p>
+        </div>
+
+        @if(visit?.notes) {
+        <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100 border-l-4 border-l-amber-400">
+          <p class="text-[10px] font-bold text-amber-800 uppercase tracking-widest mb-1">Ghi chú của bác sĩ</p>
+          <p class="text-sm text-amber-900/80 italic">"{{ visit?.notes }}"</p>
+        </div>
+        }
+      </div>
+    </div>
+
+    @if(visit?.prescriptions && visit!.prescriptions.length > 0) {
+    <div>
+      <h3 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 px-1">
+        <span class="material-symbols-outlined text-[16px]">prescriptions</span> Đơn thuốc được kê ({{
+        visit!.prescriptions.length }})
+      </h3>
+
+      <div class="space-y-3">
+        @for (med of visit!.prescriptions; track med.id) {
+        <div
+          class="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-blue-200 transition-colors">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">pill</span>
+            </div>
+            <div>
+              <p class="text-sm font-extrabold text-slate-800">{{ med.medication.name }}</p>
+              <p class="text-[11px] font-medium text-slate-500 mt-0.5">
+                {{ med.dosage }} &middot; {{ med.frequency }}
+              </p>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-xs font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+              SL: {{ med.medication.unit }}
+            </span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="px-8 py-5 border-t border-slate-100 bg-white shrink-0 flex items-center justify-end gap-3">
+    <button (click)="closeDrawer()"
+      class="px-6 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+      Đóng
+    </button>
+    <button
+      class="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 shadow-sm transition-all active:scale-95 flex items-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">print</span> In bệnh án
+    </button>
+  </div>
+
+</div>

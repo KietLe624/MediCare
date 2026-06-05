@@ -1,0 +1,187 @@
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" (click)="onClose()"></div>
+
+  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()"
+    class="relative z-10 bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+    <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+          <span class="material-symbols-outlined text-[22px]"
+            style="font-variation-settings: &quot;FILL&quot; 1">person_add</span>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">
+            {{
+            mode === "create"
+            ? "Thêm bệnh nhân mới"
+            : "Cập nhật thông tin bệnh nhân"
+            }}
+          </h2>
+
+          <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-0.5">
+            {{
+            mode === "create"
+            ? "Tạo hồ sơ y tế bệnh nhân"
+            : "Chỉnh sửa hồ sơ y tế bệnh nhân"
+            }}
+          </p>
+        </div>
+      </div>
+      <button type="button" (click)="onClose()"
+        class="p-2 hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <div
+      class="px-8 py-6 space-y-8 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div>
+        <h3 class="text-[11px] font-bold text-blue-600 uppercase tracking-widest mb-4 pb-2 border-b border-slate-100">
+          Thông tin cá nhân
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Họ đệm <span
+                class="text-red-500">*</span></label>
+            <input formControlName="firstName" type="text" placeholder="Nguyễn Văn"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Tên <span
+                class="text-red-500">*</span></label>
+            <input formControlName="lastName" type="text" placeholder="A"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Ngày sinh <span
+                class="text-red-500">*</span></label>
+            <input formControlName="dateOfBirth" type="date"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Giới tính <span
+                class="text-red-500">*</span></label>
+            <select formControlName="gender"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[position:right_12px_center] bg-no-repeat cursor-pointer">
+              <option value="Male">Nam</option>
+              <option value="Female">Nữ</option>
+              <option value="Other">Khác</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">SĐT</label>
+            <input formControlName="phoneNumber" type="text" placeholder="0901234567"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Email</label>
+            <input formControlName="email" type="email" placeholder="example@email.com"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Địa chỉ</label>
+            <input formControlName="address" type="text" placeholder="Nhập số nhà, tên đường, phường/xã, quận/huyện..."
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all shadow-sm" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-[11px] font-bold text-red-500 uppercase tracking-widest mb-4 pb-2 border-b border-slate-100">
+          Người liên hệ khẩn cấp
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Tên người liên
+              hệ</label>
+            <input formControlName="emergencyContactName" type="text" placeholder="Nhập tên người thân..."
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-500 outline-none transition-all shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">SĐT Khẩn
+              cấp</label>
+            <input formControlName="emergencyContactPhone" type="text" placeholder="090..."
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-500 outline-none transition-all shadow-sm" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3
+          class="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4 pb-2 border-b border-slate-100">
+          Thông tin y tế & Bảo hiểm
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Nhóm máu</label>
+            <select formControlName="bloodType"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[position:right_12px_center] bg-no-repeat cursor-pointer">
+              <option value="">Chưa xác định</option>
+
+              <option value="A+">Nhóm A+</option>
+              <option value="A-">Nhóm A-</option>
+
+              <option value="B+">Nhóm B+</option>
+              <option value="B-">Nhóm B-</option>
+
+              <option value="AB+">Nhóm AB+</option>
+              <option value="AB-">Nhóm AB-</option>
+
+              <option value="O+">Nhóm O+</option>
+              <option value="O-">Nhóm O-</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Loại bệnh
+              nhân</label>
+            <select formControlName="patientType"
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px_16px] bg-[position:right_12px_center] bg-no-repeat cursor-pointer">
+              <option value="">Chọn loại...</option>
+              <option value="Outpatient">Ngoại trú</option>
+              <option value="Inpatient">Nội trú</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Nhà cung cấp
+              BH</label>
+            <input formControlName="insuranceProvider" type="text" placeholder="VD: BHYT, Bảo Việt..."
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Số thẻ BHYT</label>
+            <input formControlName="insuranceNumber" type="text" placeholder="Nhập mã số BHYT..."
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all shadow-sm" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Tiền sử dị
+              ứng</label>
+            <textarea formControlName="allergies" rows="2" placeholder="Nhập các dị ứng thuốc, thực phẩm (nếu có)..."
+              class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400/60 placeholder:font-normal focus:bg-white focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all shadow-sm resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="px-8 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0 relative z-0">
+      <button type="button" (click)="onClose()"
+        class="px-5 py-2.5 rounded-xl font-bold text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 transition-all">
+        Huỷ
+      </button>
+      <button type="submit" [disabled]="patientForm.invalid || isSubmitting"
+        class="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="material-symbols-outlined text-[18px]">person_add</span>
+        {{
+        mode === "create"
+        ? "Thêm bệnh nhân mới"
+        : "Cập nhật thông tin bệnh nhân"
+        }}
+      </button>
+    </div>
+  </form>
+</div>
