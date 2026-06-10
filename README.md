@@ -2,20 +2,6 @@
 
 A comprehensive Hospital Management System built with **ASP.NET Core Web API** and **Angular**, designed to streamline hospital operations and improve patient care management.
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## 🎯 Overview
 
 MediCare is a full-stack hospital management solution that enables healthcare facilities to efficiently manage:
