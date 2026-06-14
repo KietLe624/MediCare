@@ -15,7 +15,6 @@ import { PatientService } from '../../services/patient';
 import {
   PatientQueryParams,
   PatientSummaryResponse,
-  PatientVisitResponse,
 } from '../../models/patient.model';
 import { FilterComponent } from '../../components/filter/filter';
 import { CreatePatientComponent } from '../../components/create-patient/create-patient';

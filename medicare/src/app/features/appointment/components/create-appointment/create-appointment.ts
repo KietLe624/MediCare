@@ -8,12 +8,12 @@ import {
 // Services
 import { AppointmentService } from '../../services/appointment';
 // Models
-import { AppointmentForm } from '../../pages/appointment-form/appointment-form';
+import { AppointmentFormComponent } from '../../pages/appointment-form/appointment-form';
 import { ToastService } from '../../../../core/shared/services/toast-info';
 
 @Component({
   selector: 'app-create-appointment',
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, AppointmentForm],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, AppointmentFormComponent],
   templateUrl: './create-appointment.html',
   styleUrl: './create-appointment.scss',
 })
@@ -57,7 +57,6 @@ export class CreateAppointmentComponent {
 
   onCloseAppointment() {
     this.closed.emit();
-    console.log('closed create appointment form');
   }
 
 }

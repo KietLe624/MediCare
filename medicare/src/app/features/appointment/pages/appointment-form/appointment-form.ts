@@ -3,6 +3,7 @@ import {
   Output,
   EventEmitter,
   Input,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
@@ -38,7 +39,13 @@ import {
   templateUrl: './appointment-form.html',
   styleUrl: './appointment-form.scss',
 })
-export class AppointmentForm {
+export class AppointmentFormComponent {
+  private patientService = inject(PatientService);
+  private doctorService = inject(DoctorService)
+  private scheduleService = inject(DoctorScheduleService);
+  private cdr = inject(ChangeDetectorRef);
+  private fb = inject(FormBuilder);
+
   @Input() mode: 'create' | 'edit' = 'create';
   @Input() patientId!: number;
 
@@ -47,13 +54,7 @@ export class AppointmentForm {
 
   appointmentForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private patientService: PatientService,
-    private doctorService: DoctorService,
-    private scheduleService: DoctorScheduleService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.appointmentForm = this.fb.group({
       patientId: [null, Validators.required],
       doctorId: [null, Validators.required],
@@ -206,7 +207,6 @@ export class AppointmentForm {
 
   closeForm() {
     this.closed.emit();
-    console.log('closed appointment form');
   }
 
   // PATIENT

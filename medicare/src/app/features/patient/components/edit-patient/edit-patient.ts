@@ -16,6 +16,7 @@ import { ToastService } from "../../../../core/shared/services/toast-info";
   styleUrl: './edit-patient.scss',
 })
 export class EditPatientComponent implements OnInit {
+  
   private patientService = inject(PatientService);
   private cdr = inject(ChangeDetectorRef)
   private toast = inject(ToastService);

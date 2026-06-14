@@ -1,0 +1,39 @@
+/* 1. Thiết lập vùng an toàn cho Tooltip */
+.tooltip-trigger {
+  position: relative;
+}
+
+/* 2. Tạo khối Tooltip (Mặc định ẩn) */
+.tooltip-trigger::after {
+  /* Lấy giá trị từ thuộc tính data-tooltip gán vào nội dung CSS */
+  content: attr(data-tooltip);
+
+  /* Định vị Tooltip nằm chính giữa, phía trên dấu chấm */
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+
+  /* Định dạng giao diện: Nền tối chữ trắng chuẩn UI */
+  background-color: #1e293b; /* bg-slate-800 */
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+
+  /* Hiệu ứng mượt mà */
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 3. Kích hoạt hiện Tooltip khi người dùng di chuột (Hover) */
+.tooltip-trigger:hover::after {
+  opacity: 1;
+  /* Đẩy nhẹ lên trên tạo hiệu ứng bay lên (Fade-in-up) */
+  transform: translateX(-50%) translateY(-6px);
+}

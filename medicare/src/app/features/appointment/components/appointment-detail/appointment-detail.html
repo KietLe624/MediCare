@@ -1,0 +1,205 @@
+@if (isOpen) {
+<div class="fixed inset-0 bg-slate-900/40 z-[1090] transition-opacity" (click)="closeDrawerDetail()"></div>
+
+<div
+  class="fixed inset-y-0 right-0 z-[1100] w-full max-w-xl bg-white shadow-2xl flex flex-col animate-[slideInRight_0.3s_ease-out]">
+  <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-white">
+    <div class="flex items-center gap-3">
+      <h2 class="text-base font-bold text-slate-800">Hồ sơ Lịch hẹn</h2>
+      @if (!isLoading && appointmentDetail) {
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold"
+        [ngClass]="getStatusInfo(appointmentDetail.status).class">
+        <span class="material-symbols-outlined text-[14px]">{{
+          getStatusInfo(appointmentDetail.status).icon
+          }}</span>
+        {{ getStatusInfo(appointmentDetail.status).text }}
+      </div>
+      }
+    </div>
+
+    <div class="flex items-center gap-1">
+      <button
+        class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-100 text-slate-500 transition-colors"
+        title="In phiếu">
+        <span class="material-symbols-outlined text-[18px]">print</span>
+      </button>
+      <button (click)="closeDrawerDetail()"
+        class="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-100 text-slate-500 transition-colors">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto bg-white">
+    @if (isLoading) {
+    <div class="p-6 space-y-4 animate-pulse">
+      <div class="h-8 bg-slate-100 rounded w-1/3"></div>
+      <div class="h-24 bg-slate-100 rounded-xl"></div>
+      <div class="h-32 bg-slate-100 rounded-xl"></div>
+    </div>
+    } @else if (appointmentDetail) {
+    <div class="p-6 sm:p-8 space-y-8">
+      <div>
+        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+          Thời gian dự kiến
+        </p>
+        <div class="flex items-baseline gap-2">
+          <h3 class="text-3xl font-bold text-slate-900 tracking-tight">
+            {{ appointmentDetail.startTime | slice: 0 : 5 }} -
+            {{ appointmentDetail.endTime | slice: 0 : 5 }}
+          </h3>
+          <span class="text-sm font-medium text-slate-500">
+            Ngày
+            {{ appointmentDetail.appointmentDate | date: "dd/MM/yyyy" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex gap-3">
+          <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 shrink-0">
+            <span class="material-symbols-outlined text-[20px]">person</span>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+              Bệnh nhân
+            </p>
+            <p class="text-sm font-bold text-slate-900 truncate">
+              {{
+              appointmentDetail.patient.fullName ||
+              "Đang cập
+              nhật"
+              }}
+            </p>
+            <div class="text-xs text-slate-600 mt-1 space-y-0.5">
+              <p class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[12px] text-slate-400">call</span>
+                {{ appointmentDetail.patient.phoneNumber || "Trống" }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+              Phụ trách
+            </p>
+            <p class="text-sm font-bold text-slate-900 truncate">
+              {{
+              appointmentDetail.doctor.fullName ||
+              "Chưa phân
+              công"
+              }}
+            </p>
+            <div class="text-xs text-slate-600 mt-1">
+              <p class="flex items-center gap-1 truncate">
+                <span class="material-symbols-outlined text-[12px] text-slate-400">meeting_room</span>
+                {{ appointmentDetail.department.name || "Phòng ban trống" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-slate-100" />
+
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-sm font-bold text-slate-900">Chi tiết đăng ký</h4>
+          <button (click)="openEditForm()"
+            class="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
+            Sửa thông tin
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-lg bg-slate-50 border border-slate-100">
+            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+              Lý do khám bệnh
+            </p>
+            <p class="text-sm text-slate-800 leading-relaxed">
+              {{
+              appointmentDetail.reason || "Bệnh nhân không ghi chú lý do."
+              }}
+            </p>
+          </div>
+
+          @if (appointmentDetail.notes) {
+          <div class="p-4 rounded-lg bg-yellow-50/50 border border-yellow-100">
+            <p class="text-[11px] font-bold text-yellow-700 uppercase tracking-wider mb-1.5">
+              Ghi chú nội bộ
+            </p>
+            <p class="text-sm text-yellow-900 leading-relaxed italic">
+              {{ appointmentDetail.notes }}
+            </p>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="p-4 border-t border-slate-200 bg-slate-50 shrink-0">
+    @if (!isLoading && appointmentDetail) {
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-[10px] text-slate-500">
+        <p>
+          Tạo: {{ appointmentDetail.createdAt | date: "dd/MM/yyyy HH:mm" }}
+        </p>
+        @if (appointmentDetail.updatedAt) {
+        <p>
+          Sửa:
+          {{ appointmentDetail.updatedAt | date: "dd/MM/yyyy HH:mm" }}
+        </p>
+        }
+      </div>
+
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        @if (appointmentDetail.AppointmentStatus === "Confirmed") {
+        <button (click)="updateStatus('cancel')"
+          class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors">
+          Hủy lịch
+        </button>
+        <button (click)="updateStatus('Confirmed')"
+          class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+          Xác nhận
+        </button>
+        }
+
+        @if (appointmentDetail.AppointmentStatus === "NoShow") {
+        <button (click)="updateStatus('no-show')"
+          class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors">
+          Vắng mặt
+        </button>
+        <button (click)="updateStatus('Completed')"
+          class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-slate-900 hover:bg-black transition-colors">
+          Hoàn thành
+        </button>
+        }
+
+        @if (
+        appointmentDetail.AppointmentStatus === "Completed" ||
+        appointmentDetail.AppointmentStatus === "Cancelled" ||
+        appointmentDetail.AppointmentStatus === "NoShow"
+        ) {
+        <div
+          class="px-4 py-2.5 rounded-lg text-sm font-medium text-slate-500 bg-slate-100 border border-slate-200 flex items-center justify-center gap-2 w-full">
+          <span class="material-symbols-outlined text-[16px]">lock</span>
+          Đã khóa hồ sơ
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>
+}
+
+@if (isEditFormOpen()) {
+<app-edit-appointment (close)="closeEditForm()" (save)="onSubmitEditForm()"></app-edit-appointment>
+}
