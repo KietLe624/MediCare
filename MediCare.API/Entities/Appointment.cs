@@ -13,10 +13,10 @@ namespace MediCare.API.Entities
         public DateOnly AppointmentDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
-        public string Status { get; set; } = "Scheduled"; // Scheduled, Confirmed, Completed, Cancelled, NoShow, Rescheduled
+        public string Status { get; set; } = "Confirmed"; // Confirmed, Completed, Cancelled, NoShow, Rescheduled
         public string? Reason { get; set; }
         public string? Notes { get; set; }
-        public long? CreatedBy { get; set; }
+        public long? CreatedBy { get; set; } 
         public long? UpdatedBy { get; set; }
 
         // Navigation

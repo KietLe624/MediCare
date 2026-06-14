@@ -12,6 +12,7 @@ import { PatientPageComponent } from './features/patient/pages/patient-page/pati
 import { PatientDetailComponent } from './features/patient/components/patient-detail/patient-detail';
 import { EditPatientComponent } from './features/patient/components/edit-patient/edit-patient';
 import { CreatePatientComponent } from './features/patient/components/create-patient/create-patient';
+import { AppointmentPageComponent } from './features/appointment/pages/appointment-page/appointment-page';
 
 
 export const routes: Routes = [
@@ -65,6 +66,17 @@ export const routes: Routes = [
       {
         path: ':id/detail',
         component: PatientDetailComponent,
+      }
+    ]
+  },
+  {
+    path: 'appointments',
+    canActivate: [authGuard, roleGuard],
+    component: AdminLayout,
+    children: [
+      {
+        path: '',
+        component: AppointmentPageComponent,
       }
     ]
   }

@@ -12,11 +12,13 @@ namespace MediCare.API.Services
 
         private readonly AppDbContext _context;
         private readonly ILogger<AppointmentService> _logger;
+        private readonly AppDbContext _db;
 
         public AppointmentService(AppDbContext context, ILogger<AppointmentService> logger)
         {
             _context = context;
             _logger = logger;
+            _db = context;
         }
         public async Task<PagedResponse<AppointmentSummaryResponse>> GetAllAsync(AppointmentQueryParams query)
         {
@@ -37,8 +39,10 @@ namespace MediCare.API.Services
             if (query.PatientId.HasValue)
                 q = q.Where(a => a.PatientId == query.PatientId.Value);
 
-            if (!string.IsNullOrWhiteSpace(query.Status))
-                q = q.Where(a => a.Status == query.Status);
+
+            // convert enum sang string 
+            if (query.Status.HasValue)
+                q = q.Where(a => a.Status == query.Status.Value.ToString());
 
             // sort
 
@@ -134,7 +138,7 @@ namespace MediCare.API.Services
                 AppointmentDate = request.AppointmentDate,
                 StartTime = request.StartTime,
                 //EndTime = request.EndTime,
-                Status = "Scheduled",
+                Status = "Confirmed ",
                 Reason = request.Reason,
                 Notes = request.Notes,
                 CreatedBy = createdByUserId,
@@ -239,9 +243,20 @@ namespace MediCare.API.Services
         {
             var appointment = await FindAppointmentOrThrowAsync(id);
 
-            if (appointment.Status != "Scheduled" && appointment.Status != "Confirmed")
+            if (appointment.Status != "Confirmed")
                 throw new BadHttpRequestException(
                     $"Không thể đánh dấu NoShow lịch hẹn ở trạng thái '{appointment.Status}'");
+
+            if(TimeOnly.FromDateTime(DateTime.UtcNow) < appointment.StartTime)
+                throw new BadHttpRequestException(
+                    $"Chỉ có thể đánh dấu NoShow sau giờ hẹn bắt đầu");
+
+
+            appointment.Status = "NoShow";
+            appointment.UpdatedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Appointment marked as NoShow: Id={Id}", appointment.Id);
 
             return await ChangeStatusAsync(appointment, "NoShow", updatedByUserId);
         }
@@ -332,7 +347,7 @@ namespace MediCare.API.Services
             AppointmentDate = a.AppointmentDate,
             StartTime = a.StartTime,
             EndTime = a.EndTime,
-            Status = a.Status,
+            Status = Enum.TryParse<AppointmentStatus>(a.Status, out var status) ? status : null,
             Reason = a.Reason,
             Notes = a.Notes,
             CreatedAt = a.CreatedAt,
@@ -366,7 +381,7 @@ namespace MediCare.API.Services
             AppointmentDate = a.AppointmentDate,
             StartTime = a.StartTime,
             EndTime = a.EndTime,
-            Status = a.Status,
+            Status = Enum.TryParse<AppointmentStatus>(a.Status, out var status) ? status : null,
             Reason = a.Reason,
             Patient = new PatientBriefResponse
             {
@@ -384,7 +399,5 @@ namespace MediCare.API.Services
             }
         };
         // 
-
-
     }
 }

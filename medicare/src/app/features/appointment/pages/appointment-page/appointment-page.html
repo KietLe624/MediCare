@@ -1,1 +1,98 @@
+<div class="space-y-6" (click)="closeMenu()">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  >
+    <app-filter (filterChange)="onFilterChange($event)"></app-filter>
 
+    <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+      <div
+        class="bg-slate-50 border border-slate-200/60 p-1 rounded-xl flex items-center h-[44px] shrink-0"
+      >
+        <button
+          (click)="switchView('list')"
+          class="h-full flex items-center gap-1.5 px-4 rounded-lg text-xs font-bold transition-all"
+          [class.bg-white]="currentView === 'list'"
+          [class.shadow-sm]="currentView === 'list'"
+          [class.text-blue-600]="currentView === 'list'"
+          [class.text-slate-500]="currentView !== 'list'"
+        >
+          <span class="material-symbols-outlined text-[16px]">view_list</span>
+          Danh sách
+        </button>
+
+        <button
+          (click)="switchView('calendar')"
+          class="h-full flex items-center gap-1.5 px-4 rounded-lg text-xs font-bold transition-all"
+          [class.bg-white]="currentView === 'calendar'"
+          [class.shadow-sm]="currentView === 'calendar'"
+          [class.text-blue-600]="currentView === 'calendar'"
+          [class.text-slate-500]="currentView !== 'calendar'"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >calendar_view_day</span
+          >
+          Lịch
+        </button>
+      </div>
+
+      <button
+        (click)="openForm()"
+        class="h-[38px] text-xs font-bold text-white flex items-center gap-1.5 bg-blue-600 px-4 rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-600/10 active:scale-[0.98] transition-all shrink-0"
+      >
+        <span class="material-symbols-outlined text-[20px]">add</span>
+        Đặt lịch hẹn
+      </button>
+    </div>
+  </div>
+
+  @if (currentView === "list") {
+    @if (!appointments || appointments.length === 0) {
+      <div
+        class="bg-white rounded-3xl border border-slate-200/60 p-12 text-center flex flex-col items-center justify-center min-h-[360px] animate-[fadeIn_0.2s_ease-out]"
+      >
+        <div
+          class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 mb-4"
+        >
+          <span class="material-symbols-outlined text-[28px]">event_busy</span>
+        </div>
+        <h3 class="text-sm font-bold text-slate-800">
+          Không tìm thấy lịch hẹn
+        </h3>
+        <p
+          class="text-xs text-slate-400 font-medium max-w-xs mt-1.5 leading-relaxed"
+        >
+          Hiện tại không có dữ liệu ca khám nào khớp với bộ lọc của bro. Vui
+          lòng thử lại hoặc tạo lịch mới.
+        </p>
+        <button
+          (click)="openForm()"
+          class="mt-5 px-4 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-600 transition-colors flex items-center gap-1"
+        >
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          Tạo lịch khám đầu tiên
+        </button>
+      </div>
+    } @else {
+      <app-appointment-table
+        [appointments]="appointments"
+        (pageChange)="onPageChange($event)"
+        [currentPage]="queryParams.page || 1"
+        [totalPages]="pagination.totalPages"
+      >
+      </app-appointment-table>
+    }
+  }
+
+  @if (currentView === "calendar") {
+    <app-appointment-calendar
+      [appointments]="appointments"
+    ></app-appointment-calendar>
+  }
+</div>
+
+@if (isOpenForm()) {
+  <app-create-appointment
+    (closed)="closeForm()"
+    (saved)="onSubmitForm()"
+  ></app-create-appointment>
+}

@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
+using static MediCare.API.DTOs.AppointmentDTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +84,7 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
+
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
 // JWT Authentication v2
 builder.Services.AddAuthentication(options =>
@@ -139,6 +142,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Convert enum - string 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 
 // Email Service
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -150,6 +160,16 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 // AutoMapper 
 builder.Services.AddAutoMapper(typeof(MediCare.API.Common.MappingProfile));
+
+// Background Job
+var appointmentSettings = builder.Configuration
+       .GetSection("AppointmentSettings")
+       .Get<AppointmentSettings>() ?? new AppointmentSettings();
+builder.Services.AddSingleton(appointmentSettings);
+
+
+
+builder.Services.AddHostedService<AppointmentStatusJob>();
 
 // CORS cho Angular
 builder.Services.AddCors(options =>

@@ -1,3 +1,13 @@
+// enums/appointment.enum.ts
+export enum AppointmentStatus {
+  Confirmed   = "Confirmed",
+  Completed   = "Completed",
+  Cancelled   = "Cancelled",
+  NoShow      = "NoShow",
+  Rescheduled = "Rescheduled"
+}
+
+
 export interface PaginatedResponse<T> {
   data: T[];
   totalCount: number;
@@ -11,7 +21,7 @@ export interface AppointmentQueryParams {
   date?: string; // yyyy-MM-dd
   doctorId?: number;
   patientId?: number;
-  status?: string;
+  status?: AppointmentStatus;
 
   page?: number;
   pageSize?: number;
@@ -56,6 +66,7 @@ export interface CancelAppointmentRequest {
 // ==============================
 
 export interface AppointmentResponse {
+  AppointmentStatus: string;
   id: number;
 
   appointmentDate: string;
@@ -65,7 +76,7 @@ export interface AppointmentResponse {
   notes?: string | null;
   reason?: string | null;
 
-  status: string;
+  status: AppointmentStatus;
 
   createdAt: Date;
   updatedAt?: Date | null;
@@ -82,7 +93,7 @@ export interface AppointmentSummaryResponse {
   startTime: string;
   endTime: string;
 
-  status: string;
+  status: AppointmentStatus;
   reason?: string | null;
 
   patient: PatientBriefResponse;

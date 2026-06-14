@@ -1,0 +1,7 @@
+<app-appointment-form
+  mode="edit"
+  [patientId]="patientId"
+  (closed)="closeEditForm()"
+  (saved)="updateAppointment($event, appointmentId)"
+  [preFillPatientName]="patientData"
+></app-appointment-form>

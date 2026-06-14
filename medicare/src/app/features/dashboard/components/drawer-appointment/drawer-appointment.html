@@ -20,8 +20,8 @@
           class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest"
           [ngClass]="{
             'bg-emerald-100 text-emerald-700': data.status === 'Confirmed',
-            'bg-amber-100 text-amber-700':
-              data.status === 'Pending' || data.status === 'Scheduled',
+            'bg-blue-100 text-blue-700':
+              data.status === 'Confirmed',
             'bg-rose-100 text-rose-700': data.status === 'Cancelled',
           }">
           {{ data.status }}

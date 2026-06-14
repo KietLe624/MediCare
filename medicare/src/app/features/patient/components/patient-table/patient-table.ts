@@ -7,9 +7,6 @@ import { ClickOutside } from "../../../../core/shared/directives/click-outside";
 import { PatientSummaryResponse } from '../../models/patient.model';
 import { CreateAppointmentComponent } from "../../../appointment/components/create-appointment/create-appointment";
 
-
-// Components
-
 @Component({
   selector: 'app-patient-table',
   imports: [CommonModule, ClickOutside, CreateAppointmentComponent],
@@ -35,6 +32,7 @@ export class PatientTableComponent {
   // đóng dropdown menu khi click ra ngoài
   closeMenu() {
     this.openedMenuId = null;
+
   }
   // form chỉnh sửa
   onEdit(id: number) {

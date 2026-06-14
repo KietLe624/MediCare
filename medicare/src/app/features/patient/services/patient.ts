@@ -38,7 +38,6 @@ export class PatientService {
   getPatients(params: PatientQueryParams) {
     try {
       const httpParams = buildHttpParams(params);
-
       return this.http.get<PagedResponse<PatientSummaryResponse>>(
         `${this.patientUrl}`,
         {
@@ -152,8 +151,6 @@ export class PatientService {
       throw error;
     }
   }
-
-
 }
 export function buildHttpParams(params: any): HttpParams {
 
